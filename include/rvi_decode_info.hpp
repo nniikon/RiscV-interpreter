@@ -1,0 +1,66 @@
+#pragma once
+
+#include <cstdint>
+
+namespace rvi {
+
+struct InstructionDecodedInfoTypeR {
+    uint32_t opcode;
+    uint32_t rd;
+    uint32_t funct3;
+    uint32_t rs1;
+    uint32_t rs2;
+    uint32_t funct7;
+};
+
+struct InstructionDecodedInfoTypeI {
+    uint32_t opcode;
+    uint32_t rd;
+    uint32_t funct3;
+    uint32_t rs1;
+    int32_t  imm;
+};
+
+struct InstructionDecodedInfoTypeS {
+    uint32_t opcode;
+    uint32_t funct3;
+    uint32_t rs1;
+    uint32_t rs2;
+    int32_t  imm;
+};
+
+struct InstructionDecodedInfoTypeU {
+    uint32_t opcode;
+    uint32_t rd;
+    int32_t  imm;
+};
+
+struct InstructionDecodedInfoTypeB {
+    uint32_t opcode;
+    uint32_t funct3;
+    uint32_t rs1;
+    uint32_t rs2;
+    int32_t  imm;
+};
+
+struct InstructionDecodedInfoTypeJ {
+    uint32_t opcode;
+    uint32_t rd;
+    int32_t  imm;
+};
+
+constexpr InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr);
+constexpr InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr);
+constexpr InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr);
+constexpr InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr);
+constexpr InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr);
+constexpr InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr);
+
+constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr);
+constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr);
+constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr);
+constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr);
+constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr);
+constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr);
+
+} // namespace
