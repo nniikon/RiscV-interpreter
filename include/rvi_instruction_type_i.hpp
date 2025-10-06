@@ -3,8 +3,10 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <memory>
 
 #include "rvi_instruction_interface.hpp"
+#include "rvi_instruction_registry.hpp"
 
 namespace rvi {
 namespace rv32i {
@@ -33,8 +35,7 @@ class Load : public IInstructionTypeI {
             static_cast<int32_t>(state->regs[info_.rs1]) + info_.imm
         );
 
-        typename Oper::type value{};
-        memcpy(&value, state->memory.Get<typename Oper::type>(addr), sizeof(value));
+        auto value = state->memory.Get<typename Oper::type>(addr);
 
         if constexpr (Oper::need_sex) {
             int32_t sex_value = static_cast<int32_t>(value);
@@ -244,6 +245,28 @@ class Fence : public IInstructionTypeI {
     const char* GetName()           const override { return "Fence"; }
     uint32_t    GetExtendedOpcode() const override { return 0x00; }
 };
+
+void RegisterInstructionsTypeI(rvi::InstructionRegistry* registry) {
+    registry->RegisterInstruction(std::make_unique<Fence> ());
+    registry->RegisterInstruction(std::make_unique<Ebreak>());
+    registry->RegisterInstruction(std::make_unique<Ecall> ());
+    registry->RegisterInstruction(std::make_unique<Ecall> ());
+    registry->RegisterInstruction(std::make_unique<Srai>  ()); 
+    registry->RegisterInstruction(std::make_unique<Srli>  ()); 
+    registry->RegisterInstruction(std::make_unique<Slli>  ()); 
+    registry->RegisterInstruction(std::make_unique<Ori>   ());  
+    registry->RegisterInstruction(std::make_unique<Andi>  ()); 
+    registry->RegisterInstruction(std::make_unique<Xori>  ()); 
+    registry->RegisterInstruction(std::make_unique<Stliu> ());
+    registry->RegisterInstruction(std::make_unique<Stli>  ()); 
+    registry->RegisterInstruction(std::make_unique<Addi>  ());
+    registry->RegisterInstruction(std::make_unique<Jalr>  ());
+    registry->RegisterInstruction(std::make_unique<Lb>    ()); 
+    registry->RegisterInstruction(std::make_unique<Lbu>   ());
+    registry->RegisterInstruction(std::make_unique<Lh>    ()); 
+    registry->RegisterInstruction(std::make_unique<Lhu>   ());
+    registry->RegisterInstruction(std::make_unique<Lw>    ()); 
+}
 
 } // namespace rv32i
 } // namespace rvi

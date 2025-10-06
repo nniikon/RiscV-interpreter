@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "rvi_instruction_interface.hpp"
+#include "rvi_instruction_registry.hpp"
 
 namespace rvi {
 namespace rv32i {
@@ -77,6 +78,14 @@ using Sub = InstructionTypeR<SubOp>;
 using Sll = InstructionTypeR<SllOp>;
 using Srl = InstructionTypeR<SrlOp>;
 using Sra = InstructionTypeR<SraOp>;
+
+void RegisterInstructionsTypeR(rvi::InstructionRegistry* registry) {
+    registry->RegisterInstruction(std::make_unique<Add>()); 
+    registry->RegisterInstruction(std::make_unique<Sub>());
+    registry->RegisterInstruction(std::make_unique<Sll>()); 
+    registry->RegisterInstruction(std::make_unique<Srl>());
+    registry->RegisterInstruction(std::make_unique<Sra>());
+}
 
 } // namespace rv32i
 } // namespace rvi

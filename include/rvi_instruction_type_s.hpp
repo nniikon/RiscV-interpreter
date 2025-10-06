@@ -1,0 +1,63 @@
+#pragma once
+
+#include "rvi_instruction_interface.hpp"
+#include "rvi_instruction_registry.hpp"
+#include <cassert>
+#include <cstring>
+
+namespace rvi {
+
+template <class Oper>
+class Save : public rvi::IInstructionTypeS {
+    ExecutionStatus Execute(InterpreterState* state) override {
+        uint32_t addr = static_cast<uint32_t>(
+            static_cast<int32_t>(state->regs[info_.rs1]) + info_.imm
+        );
+
+        assert(addr % 4 == 0);
+
+        auto value = state->memory.Get<typename Oper::type>(addr);
+
+        memcpy(&state->regs[info_.rs2], &value, sizeof(value));
+
+        state->pc += 4u;
+
+        return ExecutionStatus::Success;
+    }
+
+    const char* GetName()           const override { return Oper::name; }
+    uint32_t    GetExtendedOpcode() const override { return Oper::extended_opcode; }
+};
+
+struct SaveWord {
+    using type = uint32_t;
+
+    static constexpr const char* name = "sw";
+    static constexpr uint32_t extended_opcode = 0x00;
+};
+
+struct SaveHalf {
+    using type = uint16_t;
+
+    static constexpr const char* name = "sh";
+    static constexpr uint32_t extended_opcode = 0x00;
+};
+
+struct SaveByte {
+    using type = uint8_t;
+
+    static constexpr const char* name = "sb";
+    static constexpr uint32_t extended_opcode = 0x00;
+};
+
+using Sw = Save<SaveWord>;
+using Sh = Save<SaveHalf>;
+using Sb = Save<SaveByte>;
+
+void RegisterInstructionsTypeS(rvi::InstructionRegistry* registry) {
+    registry->RegisterInstruction(std::make_unique<Sw>());
+    registry->RegisterInstruction(std::make_unique<Sh>());
+    registry->RegisterInstruction(std::make_unique<Sb>());
+}
+
+} // namespace
