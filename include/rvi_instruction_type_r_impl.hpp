@@ -11,16 +11,15 @@ template <class Oper>
 class InstructionTypeR : public IInstructionTypeR {
 public:
     ExecutionStatus Execute(InterpreterState* state) override {
-        state->regs[info.rd] = Oper::exec(state->regs[info.rs1],
-                                        state->regs[info.rs2]);
+        state->regs[info_.rd] = Oper::exec(state->regs[info_.rs1],
+                                           state->regs[info_.rs2]);
         state->pc += 4u;
 
         return ExecutionStatus::Success;
     }
 
-    const char* GetName() const override {
-        return Oper::name;
-    }
+    const char* GetName()           const override { return Oper::name; }
+    uint32_t    GetExtendedOpcode() const override { return Oper::extended_opcode; }
 };
 
 struct AddOp {
@@ -29,6 +28,8 @@ struct AddOp {
     static uint32_t exec(uint32_t a, uint32_t b) {
         return a + b;
     }
+
+    static const uint32_t extended_opcode = 0x00;
 };
 
 struct SubOp {
@@ -37,6 +38,8 @@ struct SubOp {
     static uint32_t exec(uint32_t a, uint32_t b) {
         return a - b; 
     };
+
+    static const uint32_t extended_opcode = 0x00;
 };
 
 struct SllOp {
@@ -45,6 +48,8 @@ struct SllOp {
     static uint32_t exec(uint32_t a, uint32_t b) {
         return a << (b & 31);
     }
+
+    static const uint32_t extended_opcode = 0x00;
 };
 
 struct SrlOp {
@@ -53,6 +58,8 @@ struct SrlOp {
     static uint32_t exec(uint32_t a, uint32_t b) {
         return a >> (b & 31);
     }
+
+    static const uint32_t extended_opcode = 0x00;
 };
 
 struct SraOp {
@@ -61,6 +68,8 @@ struct SraOp {
     static uint32_t exec(uint32_t a, uint32_t b) {
         return static_cast<uint32_t>( static_cast<int32_t>(a) >> (b & 31) );
     }
+
+    static const uint32_t extended_opcode = 0x00;
 };
     
 using Add = InstructionTypeR<AddOp>;

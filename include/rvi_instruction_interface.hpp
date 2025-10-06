@@ -22,10 +22,20 @@ public:
 
 class IInstructionTypeR : public IInstruction {
 protected:
-    InstructionDecodedInfoTypeR info;
+    InstructionDecodedInfoTypeR info_;
 
 public:
     IInstructionTypeR(uint32_t instr);
+
+    uint32_t GetExtendedOpcode() const override;
+};
+
+class IInstructionTypeI : public IInstruction {
+protected:
+    InstructionDecodedInfoTypeI info_;
+
+public:
+    IInstructionTypeI(uint32_t instr);
 
     uint32_t GetExtendedOpcode() const override;
 };

@@ -49,18 +49,18 @@ struct InstructionDecodedInfoTypeJ {
     int32_t  imm;
 };
 
-constexpr InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr);
-constexpr InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr);
-constexpr InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr);
-constexpr InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr);
-constexpr InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr);
-constexpr InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr);
+InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr);
+InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr);
+InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr);
+InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr);
+InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr);
+InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr);
 
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr);
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr);
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr);
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr);
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr);
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr);
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr);
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr);
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr);
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr);
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr);
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr);
 
 } // namespace

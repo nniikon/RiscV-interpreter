@@ -26,9 +26,8 @@ static inline constexpr uint32_t pack_ext(uint32_t f7, uint32_t f3, uint32_t opc
 
 //================| Extended Opcode Evals |=================
 
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr) { return pack_ext(instr.funct7, instr.funct3, instr.opcode); }
 
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr) {
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr) {
     // FUCK YOU SRAI
     const bool is_op_imm = (instr.opcode == 0x13u);
     const bool is_shift  = (instr.funct3 == 0x1u) || (instr.funct3 == 0x5u);
@@ -38,14 +37,15 @@ constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr) {
     return pack_ext(f7eq, instr.funct3, instr.opcode);
 }
 
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr) { return pack_ext(0u,           instr.funct3, instr.opcode); }
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr) { return pack_ext(0u,           0u,           instr.opcode); }
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr) { return pack_ext(0u,           instr.funct3, instr.opcode); }
-constexpr uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr) { return pack_ext(0u,           0u,           instr.opcode); }
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr) { return pack_ext(instr.funct7, instr.funct3, instr.opcode); }
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr) { return pack_ext(0u,           instr.funct3, instr.opcode); }
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr) { return pack_ext(0u,           0u,           instr.opcode); }
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr) { return pack_ext(0u,           instr.funct3, instr.opcode); }
+uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr) { return pack_ext(0u,           0u,           instr.opcode); }
 
 //================| Decoders |=================
 
-constexpr InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr) {
+InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr) {
     return {
         bits(instr, 6,  0),
         bits(instr, 11, 7),
@@ -56,7 +56,7 @@ constexpr InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr) {
     };
 }
 
-constexpr InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr) {
+InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr) {
     const uint32_t imm12 = bits(instr, 31, 20);
     return {
         bits(instr, 6,  0),
@@ -67,7 +67,7 @@ constexpr InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr) {
     };
 }
 
-constexpr InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr) {
+InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr) {
     const uint32_t imm11_5 = bits(instr, 31, 25);
     const uint32_t imm4_0  = bits(instr, 11, 7);
     const uint32_t imm12   = (imm11_5 << 5) | imm4_0;
@@ -80,7 +80,7 @@ constexpr InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr) {
     };
 }
 
-constexpr InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr) {
+InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr) {
     const uint32_t upper_u = bits(instr, 31, 12);
     const int32_t  upper_i = static_cast<int32_t>(upper_u << 12);
     return {
@@ -90,7 +90,7 @@ constexpr InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr) {
     };
 }
 
-constexpr InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr) {
+InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr) {
     const uint32_t imm12   = bits(instr, 31, 31);
     const uint32_t imm10_5 = bits(instr, 30, 25);
     const uint32_t imm4_1  = bits(instr, 11, 8);
@@ -105,7 +105,7 @@ constexpr InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr) {
     };
 }
 
-constexpr InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr) {
+InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr) {
     const uint32_t imm20    = bits(instr, 31, 31);
     const uint32_t imm10_1  = bits(instr, 30, 21);
     const uint32_t imm11    = bits(instr, 20, 20);
