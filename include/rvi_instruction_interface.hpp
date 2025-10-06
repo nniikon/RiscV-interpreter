@@ -46,4 +46,12 @@ public:
     uint32_t GetExtendedOpcode() const override;
 };
 
+class IInstructionTypeU : public IInstruction {
+protected:
+    InstructionDecodedInfoTypeU info_;
+
+public:
+    uint32_t GetExtendedOpcode() const override;
+};
+
 } // namespace
