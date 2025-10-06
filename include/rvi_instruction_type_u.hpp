@@ -4,6 +4,7 @@
 #include "rvi_instruction_registry.hpp"
 
 namespace rvi {
+namespace rv32i {
 
 class Lui : public IInstructionTypeU {
 
@@ -34,4 +35,5 @@ void RegisterInstructionsTypeU(rvi::InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Auipc>());
 }
 
+} // namespace rv32i
 } // namespace

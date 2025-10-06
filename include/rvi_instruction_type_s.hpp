@@ -6,22 +6,17 @@
 #include <cstring>
 
 namespace rvi {
+namespace rv32i {
 
 template <class Oper>
 class Save : public rvi::IInstructionTypeS {
     ExecutionStatus Execute(InterpreterState* state) override {
-        uint32_t addr = static_cast<uint32_t>(
-            static_cast<int32_t>(state->regs[info_.rs1]) + info_.imm
-        );
+        uint32_t addr = state->regs[info_.rs1] + static_cast<int32_t>(info_.imm);
 
-        assert(addr % 4 == 0);
-
-        auto value = state->memory.Get<typename Oper::type>(addr);
-
-        memcpy(&state->regs[info_.rs2], &value, sizeof(value));
+        typename Oper::type value = static_cast<typename Oper::type>(state->regs[info_.rs2]);
+        state->memory.Set<typename Oper::type>(addr, value);
 
         state->pc += 4u;
-
         return ExecutionStatus::Success;
     }
 
@@ -60,4 +55,5 @@ void RegisterInstructionsTypeS(rvi::InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Sb>());
 }
 
-} // namespace
+} // namespace rv32i
+} // namespace rvi
