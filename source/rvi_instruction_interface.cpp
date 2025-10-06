@@ -3,6 +3,7 @@
 
 using namespace rvi;
 
+#if 0
 IInstructionTypeR::IInstructionTypeR(uint32_t instr)
     : info_(DecodeInstructionTypeR(instr))
 {}
@@ -10,3 +11,5 @@ IInstructionTypeR::IInstructionTypeR(uint32_t instr)
 IInstructionTypeI::IInstructionTypeI(uint32_t instr)
     : info_(DecodeInstructionTypeI(instr))
 {}
+
+#endif // 0
