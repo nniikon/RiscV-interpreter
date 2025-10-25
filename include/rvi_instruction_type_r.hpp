@@ -30,7 +30,8 @@ struct AddOp {
         return a + b;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    // funct7=0x00, funct3=0x0, opcode=0x33
+    static const uint32_t extended_opcode = 0x00000033u;
 };
 
 struct SubOp {
@@ -40,7 +41,8 @@ struct SubOp {
         return a - b; 
     };
 
-    static const uint32_t extended_opcode = 0x00;
+    // funct7=0x20, funct3=0x0, opcode=0x33
+    static const uint32_t extended_opcode = 0x00008033u;
 };
 
 struct SllOp {
@@ -50,7 +52,8 @@ struct SllOp {
         return a << (b & 31);
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    // funct7=0x00, funct3=0x1, opcode=0x33
+    static const uint32_t extended_opcode = 0x000000B3u;
 };
 
 struct SrlOp {
@@ -60,7 +63,8 @@ struct SrlOp {
         return a >> (b & 31);
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    // funct7=0x00, funct3=0x5, opcode=0x33
+    static const uint32_t extended_opcode = 0x000002B3u;
 };
 
 struct SraOp {
@@ -70,7 +74,8 @@ struct SraOp {
         return static_cast<uint32_t>( static_cast<int32_t>(a) >> (b & 31) );
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    // funct7=0x20, funct3=0x5, opcode=0x33
+    static const uint32_t extended_opcode = 0x000082B3u;
 };
     
 using Add = InstructionTypeR<AddOp>;

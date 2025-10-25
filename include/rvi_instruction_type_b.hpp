@@ -28,42 +28,42 @@ struct BeqOper {
     using type = int32_t;
     static bool Condition(type lhs, type rhs) { return lhs == rhs; }
     static constexpr const char* const name = "beq";
-    static const uint32_t extended_opcode   = 0x00;
+    static const uint32_t extended_opcode   = 0x63u;   // funct3=000, opcode=0x63
 };
 
 struct BneOper {
     using type = int32_t;
     static bool Condition(type lhs, type rhs) { return lhs != rhs; }
     static constexpr const char* const name = "bne";
-    static const uint32_t extended_opcode   = 0x00;
+    static const uint32_t extended_opcode   = 0xE3u;   // funct3=001, opcode=0x63
 };
 
 struct BltOper {
     using type = int32_t;
     static bool Condition(type lhs, type rhs) { return lhs < rhs; }
     static constexpr const char* const name = "blt";
-    static const uint32_t extended_opcode   = 0x00;
+    static const uint32_t extended_opcode   = 0x263u;  // funct3=100, opcode=0x63
 };
 
 struct BgeOper {
     using type = int32_t;
     static bool Condition(type lhs, type rhs) { return lhs >= rhs; }
     static constexpr const char* const name = "bge";
-    static const uint32_t extended_opcode   = 0x00;
+    static const uint32_t extended_opcode   = 0x2E3u;  // funct3=101, opcode=0x63
 };
 
 struct BltuOper {
     using type = uint32_t;
     static bool Condition(type lhs, type rhs) { return lhs < rhs; }
     static constexpr const char* const name = "bltu";
-    static const uint32_t extended_opcode   = 0x00;
+    static const uint32_t extended_opcode   = 0x363u;  // funct3=110, opcode=0x63
 };
 
 struct BgeuOper {
     using type = uint32_t;
     static bool Condition(type lhs, type rhs) { return lhs >= rhs; }
     static constexpr const char* const name = "bgeu";
-    static const uint32_t extended_opcode   = 0x00;
+    static const uint32_t extended_opcode   = 0x3E3u;  // funct3=111, opcode=0x63
 };
 
 using Beq  = Branch<BeqOper>;
@@ -83,4 +83,4 @@ void RegisterInstructionsTypeB(InstructionRegistry* registry) {
 }
 
 } // namespace rv32i
-} // namespace
+} // namespace rvi

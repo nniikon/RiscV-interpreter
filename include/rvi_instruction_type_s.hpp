@@ -3,7 +3,6 @@
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 #include <cassert>
-#include <cstring>
 
 namespace rvi {
 namespace rv32i {
@@ -26,23 +25,20 @@ class Save : public rvi::IInstructionTypeS {
 
 struct SaveWord {
     using type = uint32_t;
-
     static constexpr const char* name = "sw";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x123; // pack_ext(0, 0b010, 0x23)
 };
 
 struct SaveHalf {
     using type = uint16_t;
-
     static constexpr const char* name = "sh";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x0A3; // pack_ext(0, 0b001, 0x23)
 };
 
 struct SaveByte {
     using type = uint8_t;
-
     static constexpr const char* name = "sb";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x023; // pack_ext(0, 0b000, 0x23)
 };
 
 using Sw = Save<SaveWord>;

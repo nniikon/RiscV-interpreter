@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <cstdint>
-#include <cstring>
 #include <memory>
 
 #include "rvi_instruction_interface.hpp"
@@ -25,7 +24,7 @@ class Jalr : public IInstructionTypeI {
     }
 
     const char* GetName()           const override { return "jalr"; };
-    uint32_t    GetExtendedOpcode() const override { return 0x00; }
+    uint32_t    GetExtendedOpcode() const override { return 0x67; }
 };
 
 template <class Oper>
@@ -59,35 +58,35 @@ struct LoadByteUnsignedOper {
     using type = uint8_t;
     static constexpr bool need_sex = false;
     static constexpr const char* name = "lbu";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x203; // f7=0, f3=100, opc=0x03
 };
 
 struct LoadByteOper {
     using type = int8_t;
     static constexpr bool need_sex = true;
     static constexpr const char* name = "lb";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x03; // f7=0, f3=000, opc=0x03
 };
 
 struct LoadHalfUnsignedOper {
     using type = uint16_t;
     static constexpr bool need_sex = false;
     static constexpr const char* name = "lhu";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x283; // f7=0, f3=101, opc=0x03
 };
 
 struct LoadHalfOper {
     using type = int16_t;
     static constexpr bool need_sex = true;
     static constexpr const char* name = "lh";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x83; // f7=0, f3=001, opc=0x03
 };
 
 struct LoadWordOper {
     using type = uint32_t;
     static constexpr bool need_sex = false;
     static constexpr const char* name = "lw";
-    static constexpr uint32_t extended_opcode = 0x00;
+    static constexpr uint32_t extended_opcode = 0x103; // f7=0, f3=010, opc=0x03
 };
 
 } // anon namespace
@@ -120,7 +119,7 @@ struct AddiOper {
         return a + b;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x13; // f7=0, f3=000, opc=0x13
 };
 
 struct StliOper {
@@ -132,7 +131,7 @@ struct StliOper {
         return a_i < b_i ? 1 : 0;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x113; // f7=0, f3=010, opc=0x13
 };
 
 struct StliuOper {
@@ -142,7 +141,7 @@ struct StliuOper {
         return a < b ? 1 : 0;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x193; // f7=0, f3=011, opc=0x13
 };
 
 struct XoriOper {
@@ -152,7 +151,7 @@ struct XoriOper {
         return a ^ b;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x213; // f7=0, f3=100, opc=0x13
 };
 
 struct AndiOper {
@@ -162,7 +161,7 @@ struct AndiOper {
         return a & b;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x393; // f7=0, f3=111, opc=0x13
 };
 
 struct OriOper {
@@ -172,7 +171,7 @@ struct OriOper {
         return a | b;
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x313; // f7=0, f3=110, opc=0x13
 };
 
 struct SlliOper {
@@ -182,7 +181,7 @@ struct SlliOper {
         return a << (b & 0x1Fu);
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x93; // f7=0, f3=001, opc=0x13
 };
 
 struct SrliOper {
@@ -192,7 +191,7 @@ struct SrliOper {
         return a >> (b & 0x1Fu);
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x293; // f7=0, f3=101, opc=0x13
 };
 
 struct SraiOper {
@@ -204,7 +203,7 @@ struct SraiOper {
         );
     }
 
-    static const uint32_t extended_opcode = 0x00;
+    static const uint32_t extended_opcode = 0x8293; // f7=0b0100000, f3=101, opc=0x13
 };
 
 } // anon namespace
@@ -225,7 +224,7 @@ class Ecall : public IInstructionTypeI {
     }
 
     const char* GetName()           const override { return "Ecall"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x00; }
+    uint32_t    GetExtendedOpcode() const override { return 0x73; }
 };
 
 class Ebreak : public IInstructionTypeI {
@@ -234,7 +233,7 @@ class Ebreak : public IInstructionTypeI {
     }
 
     const char* GetName()           const override { return "Ebreak"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x00; }
+    uint32_t    GetExtendedOpcode() const override { return 0x73; }
 };
 
 class Fence : public IInstructionTypeI {
@@ -243,7 +242,7 @@ class Fence : public IInstructionTypeI {
     }
 
     const char* GetName()           const override { return "Fence"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x00; }
+    uint32_t    GetExtendedOpcode() const override { return 0x0F; }
 };
 
 void RegisterInstructionsTypeI(rvi::InstructionRegistry* registry) {

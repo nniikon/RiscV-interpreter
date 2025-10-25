@@ -7,7 +7,6 @@ namespace rvi {
 namespace rv32i {
 
 class Lui : public IInstructionTypeU {
-
     ExecutionStatus Execute(InterpreterState* state) override {
         state->regs[info_.rd] = info_.opcode << 12;
 
@@ -15,11 +14,10 @@ class Lui : public IInstructionTypeU {
     }
 
     const char* GetName()           const override { return "lui"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x00; }
+    uint32_t    GetExtendedOpcode() const override { return 0x37u; } // pack_ext(0,0,0x37)
 };
 
 class Auipc : public IInstructionTypeU {
-
     ExecutionStatus Execute(InterpreterState* state) override {
         state->regs[info_.rd] = state->pc + (info_.opcode << 12);
 
@@ -27,7 +25,7 @@ class Auipc : public IInstructionTypeU {
     }
 
     const char* GetName()           const override { return "auipc"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x00; }
+    uint32_t    GetExtendedOpcode() const override { return 0x17u; } // pack_ext(0,0,0x17)
 };
 
 void RegisterInstructionsTypeU(rvi::InstructionRegistry* registry) {
