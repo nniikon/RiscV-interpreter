@@ -20,29 +20,6 @@ static inline constexpr int32_t sex(uint32_t x, unsigned width) {
     return static_cast<int32_t>(static_cast<int32_t>(x << (32 - width)) >> (32 - width));
 }
 
-static inline constexpr uint32_t pack_ext(uint32_t f7, uint32_t f3, uint32_t opc) {
-    return ((f7 & 0x7Fu) << 10) | ((f3 & 0x7u) << 7) | (opc & 0x7Fu);
-}
-
-//================| Extended Opcode Evals |=================
-
-
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr) {
-    // FUCK YOU SRAI
-    const bool is_op_imm = (instr.opcode == 0x13u);
-    const bool is_shift  = (instr.funct3 == 0x1u) || (instr.funct3 == 0x5u);
-    const uint32_t f7eq  = (is_op_imm && is_shift)
-        ? (static_cast<uint32_t>(instr.imm) >> 5) & 0x7Fu
-        : 0u;
-    return pack_ext(f7eq, instr.funct3, instr.opcode);
-}
-
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr) { return pack_ext(instr.funct7, instr.funct3, instr.opcode); }
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr) { return pack_ext(0u,           instr.funct3, instr.opcode); }
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr) { return pack_ext(0u,           0u,           instr.opcode); }
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr) { return pack_ext(0u,           instr.funct3, instr.opcode); }
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr) { return pack_ext(0u,           0u,           instr.opcode); }
-
 //================| Decoders |=================
 
 InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr) {
@@ -118,4 +95,4 @@ InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr) {
     };
 }
 
-} // namespace
+} // namespace rvi

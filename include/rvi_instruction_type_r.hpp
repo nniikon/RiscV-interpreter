@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 
@@ -9,18 +10,29 @@ namespace rvi {
 namespace rv32i {
 
 template <class Oper>
-class InstructionTypeR : public IInstructionTypeR {
+class InstructionTypeR : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x33u;
 public:
     ExecutionStatus Execute(InterpreterState* state) override {
-        state->regs[info_.rd] = Oper::exec(state->regs[info_.rs1],
-                                           state->regs[info_.rs2]);
+        auto info = std::get<InstructionDecodedInfoTypeR>(info_);
+        state->regs[info.rd] = Oper::exec(state->regs[info.rs1],
+                                          state->regs[info.rs2]);
         state->pc += 4u;
 
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return Oper::name; }
-    uint32_t    GetExtendedOpcode() const override { return Oper::extended_opcode; }
+    const char* GetName()   const override { return Oper::name; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeR info = {
+            .opcode = kOpcode,
+            .funct3 = Oper::funct3,
+            .funct7 = Oper::funct7,
+        };
+        return info;
+    }
 };
 
 struct AddOp {
@@ -30,8 +42,8 @@ struct AddOp {
         return a + b;
     }
 
-    // funct7=0x00, funct3=0x0, opcode=0x33
-    static const uint32_t extended_opcode = 0x00000033u;
+    static constexpr uint32_t funct3 = 0x0u;
+    static constexpr uint32_t funct7 = 0x00u;
 };
 
 struct SubOp {
@@ -41,8 +53,8 @@ struct SubOp {
         return a - b; 
     };
 
-    // funct7=0x20, funct3=0x0, opcode=0x33
-    static const uint32_t extended_opcode = 0x00008033u;
+    static constexpr uint32_t funct3 = 0x0u;
+    static constexpr uint32_t funct7 = 0x20u;
 };
 
 struct SllOp {
@@ -52,8 +64,8 @@ struct SllOp {
         return a << (b & 31);
     }
 
-    // funct7=0x00, funct3=0x1, opcode=0x33
-    static const uint32_t extended_opcode = 0x000000B3u;
+    static constexpr uint32_t funct3 = 0x1u;
+    static constexpr uint32_t funct7 = 0x00u;
 };
 
 struct SrlOp {
@@ -63,8 +75,8 @@ struct SrlOp {
         return a >> (b & 31);
     }
 
-    // funct7=0x00, funct3=0x5, opcode=0x33
-    static const uint32_t extended_opcode = 0x000002B3u;
+    static constexpr uint32_t funct3 = 0x5u;
+    static constexpr uint32_t funct7 = 0x00u;
 };
 
 struct SraOp {
@@ -74,8 +86,8 @@ struct SraOp {
         return static_cast<uint32_t>( static_cast<int32_t>(a) >> (b & 31) );
     }
 
-    // funct7=0x20, funct3=0x5, opcode=0x33
-    static const uint32_t extended_opcode = 0x000082B3u;
+    static constexpr uint32_t funct3 = 0x5u;
+    static constexpr uint32_t funct7 = 0x20u;
 };
     
 using Add = InstructionTypeR<AddOp>;

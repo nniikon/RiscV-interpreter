@@ -4,43 +4,63 @@
 #include <cstdint>
 #include <memory>
 
+#include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 
 namespace rvi {
 namespace rv32i {
 
-class Jalr : public IInstructionTypeI {
+class Jalr : public IInstruction {
+    const uint32_t kOpcode = 0x67;
+public:
     ExecutionStatus Execute(InterpreterState* state) override {
+        auto info = std::get<InstructionDecodedInfoTypeI>(info_);
+
         uint32_t addr = static_cast<uint32_t>(
-            static_cast<int32_t>(state->regs[info_.rs1]) + info_.imm
+            static_cast<int32_t>(state->regs[info.rs1]) + info.imm
         ) & ~1;
+
         uint32_t return_addr = state->pc + 4u;
-        state->regs[info_.rd] = return_addr;
+        state->regs[info.rd] = return_addr;
 
         state->pc = addr;
 
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return "jalr"; };
-    uint32_t    GetExtendedOpcode() const override { return 0x67; }
+    const char* GetName()   const override { return "jalr"; };
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeI info = {
+            .opcode = kOpcode,
+            .funct3 = 0b000,
+        };
+
+        return info;
+    }
 };
 
 template <class Oper>
-class Load : public IInstructionTypeI {
+class Load : public IInstruction {
+private:
+    const uint32_t kOpcode = 0x03;
+public:
     ExecutionStatus Execute(InterpreterState* state) override {
+        auto info = std::get<InstructionDecodedInfoTypeI>(info_);
+
         uint32_t addr = static_cast<uint32_t>(
-            static_cast<int32_t>(state->regs[info_.rs1]) + info_.imm
+            static_cast<int32_t>(state->regs[info.rs1]) + info.imm
         );
 
         auto value = state->memory.Get<typename Oper::type>(addr);
 
         if constexpr (Oper::need_sex) {
             int32_t sex_value = static_cast<int32_t>(value);
-            state->regs[info_.rd] = static_cast<uint32_t>(sex_value);
+            state->regs[info.rd] = static_cast<uint32_t>(sex_value);
         } else {
-            state->regs[info_.rd] = static_cast<uint32_t>(value);
+            state->regs[info.rd] = static_cast<uint32_t>(value);
         }
 
         state->pc += 4u;
@@ -48,8 +68,17 @@ class Load : public IInstructionTypeI {
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return Oper::name; }
-    uint32_t    GetExtendedOpcode() const override { return Oper::extended_opcode; }
+    const char* GetName()   const override { return Oper::name; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeI info = {
+            .opcode = kOpcode,
+            .funct3 = Oper::funct3,
+        };
+
+        return info;
+    }
 };
 
 namespace {
@@ -58,38 +87,38 @@ struct LoadByteUnsignedOper {
     using type = uint8_t;
     static constexpr bool need_sex = false;
     static constexpr const char* name = "lbu";
-    static constexpr uint32_t extended_opcode = 0x203; // f7=0, f3=100, opc=0x03
+    static constexpr uint32_t funct3 = 0b100;
 };
 
 struct LoadByteOper {
     using type = int8_t;
     static constexpr bool need_sex = true;
     static constexpr const char* name = "lb";
-    static constexpr uint32_t extended_opcode = 0x03; // f7=0, f3=000, opc=0x03
+    static constexpr uint32_t funct3 = 0b000;
 };
 
 struct LoadHalfUnsignedOper {
     using type = uint16_t;
     static constexpr bool need_sex = false;
     static constexpr const char* name = "lhu";
-    static constexpr uint32_t extended_opcode = 0x283; // f7=0, f3=101, opc=0x03
+    static constexpr uint32_t funct3 = 0b101;
 };
 
 struct LoadHalfOper {
     using type = int16_t;
     static constexpr bool need_sex = true;
     static constexpr const char* name = "lh";
-    static constexpr uint32_t extended_opcode = 0x83; // f7=0, f3=001, opc=0x03
+    static constexpr uint32_t funct3 = 0b001;
 };
 
 struct LoadWordOper {
     using type = uint32_t;
     static constexpr bool need_sex = false;
     static constexpr const char* name = "lw";
-    static constexpr uint32_t extended_opcode = 0x103; // f7=0, f3=010, opc=0x03
+    static constexpr uint32_t funct3 = 0b010;
 };
 
-} // anon namespace
+} // namespace
 
 using Lb  = Load<LoadByteOper>;
 using Lbu = Load<LoadByteUnsignedOper>;
@@ -98,16 +127,27 @@ using Lhu = Load<LoadHalfUnsignedOper>;
 using Lw  = Load<LoadWordOper>;
 
 template <class Oper>
-class Arithm : public IInstructionTypeI {
+class Arithm : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x13u;
+public:
     ExecutionStatus Execute(InterpreterState* state) override {
-        state->regs[info_.rd] = Oper::exec(state->regs[info_.rs1], info_.imm);
+        auto info = std::get<InstructionDecodedInfoTypeI>(info_);
+        state->regs[info.rd] = Oper::exec(state->regs[info.rs1], static_cast<uint32_t>(info.imm));
         state->pc += 4u;
 
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return Oper::name; }
-    uint32_t    GetExtendedOpcode() const override { return Oper::extended_opcode; }
+    const char* GetName()   const override { return Oper::name; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeI info = {
+            .opcode = kOpcode,
+            .funct3 = Oper::funct3,
+        };
+        return info;
+    }
 };
 
 namespace {
@@ -119,7 +159,7 @@ struct AddiOper {
         return a + b;
     }
 
-    static const uint32_t extended_opcode = 0x13; // f7=0, f3=000, opc=0x13
+    static constexpr uint32_t funct3 = 0b000u;
 };
 
 struct StliOper {
@@ -131,7 +171,7 @@ struct StliOper {
         return a_i < b_i ? 1 : 0;
     }
 
-    static const uint32_t extended_opcode = 0x113; // f7=0, f3=010, opc=0x13
+    static constexpr uint32_t funct3 = 0b010u;
 };
 
 struct StliuOper {
@@ -141,7 +181,7 @@ struct StliuOper {
         return a < b ? 1 : 0;
     }
 
-    static const uint32_t extended_opcode = 0x193; // f7=0, f3=011, opc=0x13
+    static constexpr uint32_t funct3 = 0b011u;
 };
 
 struct XoriOper {
@@ -151,7 +191,7 @@ struct XoriOper {
         return a ^ b;
     }
 
-    static const uint32_t extended_opcode = 0x213; // f7=0, f3=100, opc=0x13
+    static constexpr uint32_t funct3 = 0b100u;
 };
 
 struct AndiOper {
@@ -161,7 +201,7 @@ struct AndiOper {
         return a & b;
     }
 
-    static const uint32_t extended_opcode = 0x393; // f7=0, f3=111, opc=0x13
+    static constexpr uint32_t funct3 = 0b111u;
 };
 
 struct OriOper {
@@ -171,7 +211,7 @@ struct OriOper {
         return a | b;
     }
 
-    static const uint32_t extended_opcode = 0x313; // f7=0, f3=110, opc=0x13
+    static constexpr uint32_t funct3 = 0b110u;
 };
 
 struct SlliOper {
@@ -181,7 +221,8 @@ struct SlliOper {
         return a << (b & 0x1Fu);
     }
 
-    static const uint32_t extended_opcode = 0x93; // f7=0, f3=001, opc=0x13
+    static constexpr uint32_t funct3 = 0b001u;
+    static constexpr uint32_t funct7 = 0b0000000u; // encoded in imm[11:5]
 };
 
 struct SrliOper {
@@ -191,7 +232,8 @@ struct SrliOper {
         return a >> (b & 0x1Fu);
     }
 
-    static const uint32_t extended_opcode = 0x293; // f7=0, f3=101, opc=0x13
+    static constexpr uint32_t funct3 = 0b101u;
+    static constexpr uint32_t funct7 = 0b0000000u; // encoded in imm[11:5]
 };
 
 struct SraiOper {
@@ -203,7 +245,8 @@ struct SraiOper {
         );
     }
 
-    static const uint32_t extended_opcode = 0x8293; // f7=0b0100000, f3=101, opc=0x13
+    static constexpr uint32_t funct3 = 0b101u;
+    static constexpr uint32_t funct7 = 0b0100000u; // encoded in imm[11:5]
 };
 
 } // anon namespace
@@ -218,31 +261,64 @@ using Stliu = Arithm<StliuOper>;
 using Stli  = Arithm<StliOper>;
 using Addi  = Arithm<AddiOper>;
 
-class Ecall : public IInstructionTypeI {
-    ExecutionStatus Execute(InterpreterState* state) override {
+class Ecall : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x73u;
+public:
+    ExecutionStatus Execute(InterpreterState* /*state*/) override {
         assert(0);
+        return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return "Ecall"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x73; }
+    const char* GetName()   const override { return "Ecall"; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeI info = {
+            .opcode = kOpcode,
+            .funct3 = 0b000u,
+        };
+        return info;
+    }
 };
 
-class Ebreak : public IInstructionTypeI {
-    ExecutionStatus Execute(InterpreterState* state) override {
+class Ebreak : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x73u;
+public:
+    ExecutionStatus Execute(InterpreterState* /*state*/) override {
         assert(0);
+        return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return "Ebreak"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x73; }
+    const char* GetName()   const override { return "Ebreak"; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeI info = {
+            .opcode = kOpcode,
+            .funct3 = 0b000u,
+        };
+        return info;
+    }
 };
 
-class Fence : public IInstructionTypeI {
-    ExecutionStatus Execute(InterpreterState* state) override {
+class Fence : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x0Fu;
+public:
+    ExecutionStatus Execute(InterpreterState* /*state*/) override {
         assert(0);
+        return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return "Fence"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x0F; }
+    const char* GetName()   const override { return "Fence"; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeI info = {
+            .opcode = kOpcode,
+            .funct3 = 0b000u,
+        };
+        return info;
+    }
 };
 
 void RegisterInstructionsTypeI(rvi::InstructionRegistry* registry) {

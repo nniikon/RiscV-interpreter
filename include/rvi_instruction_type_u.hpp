@@ -1,31 +1,52 @@
 #pragma once
 
+#include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 
 namespace rvi {
 namespace rv32i {
 
-class Lui : public IInstructionTypeU {
+class Lui : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x37u;
+public:
     ExecutionStatus Execute(InterpreterState* state) override {
-        state->regs[info_.rd] = info_.opcode << 12;
+        auto info = std::get<InstructionDecodedInfoTypeU>(info_);
+        state->regs[info.rd] = static_cast<uint32_t>(info.imm);
 
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return "lui"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x37u; } // pack_ext(0,0,0x37)
+    const char* GetName()   const override { return "lui"; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeU info = {
+            .opcode = kOpcode,
+        };
+        return info;
+    }
 };
 
-class Auipc : public IInstructionTypeU {
+class Auipc : public IInstruction {
+    static constexpr uint32_t kOpcode = 0x17u;
+public:
     ExecutionStatus Execute(InterpreterState* state) override {
-        state->regs[info_.rd] = state->pc + (info_.opcode << 12);
+        auto info = std::get<InstructionDecodedInfoTypeU>(info_);
+        state->regs[info.rd] = state->pc + static_cast<uint32_t>(info.imm);
 
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()           const override { return "auipc"; }
-    uint32_t    GetExtendedOpcode() const override { return 0x17u; } // pack_ext(0,0,0x17)
+    const char* GetName()   const override { return "auipc"; }
+    uint32_t    GetOpcode() const override { return kOpcode; }
+
+    InstructionDecodedCommonType GetDecodedInfo() const override {
+        InstructionDecodedInfoTypeU info = {
+            .opcode = kOpcode,
+        };
+        return info;
+    }
 };
 
 void RegisterInstructionsTypeU(rvi::InstructionRegistry* registry) {

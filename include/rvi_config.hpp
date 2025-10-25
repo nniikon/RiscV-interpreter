@@ -5,13 +5,6 @@
 namespace rvi {
 
 const size_t kNumRegs = 32;
-
-enum class InstructionType {
-    unknown = 0,
-    r,
-    i,
-    s,
-    u,
-};
+const size_t kOpcodeSize = 7;
 
 } // namespace

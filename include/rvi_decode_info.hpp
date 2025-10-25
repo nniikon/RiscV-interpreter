@@ -1,8 +1,17 @@
 #pragma once
 
 #include <cstdint>
+#include <variant>
 
 namespace rvi {
+
+enum class InstructionType {
+    unknown = 0,
+    R,
+    I,
+    S,
+    U,
+};
 
 struct InstructionDecodedInfoTypeR {
     uint32_t opcode;
@@ -49,18 +58,19 @@ struct InstructionDecodedInfoTypeJ {
     int32_t  imm;
 };
 
+using InstructionDecodedCommonType =
+      std::variant<InstructionDecodedInfoTypeR,
+                   InstructionDecodedInfoTypeI,
+                   InstructionDecodedInfoTypeB,
+                   InstructionDecodedInfoTypeJ,
+                   InstructionDecodedInfoTypeU,
+                   InstructionDecodedInfoTypeS>;
+
 InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr);
 InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr);
 InstructionDecodedInfoTypeS DecodeInstructionTypeS(uint32_t instr);
 InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr);
 InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr);
 InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr);
-
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeR instr);
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeI instr);
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeS instr);
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeU instr);
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeB instr);
-uint32_t EvalExtendedOpcode(InstructionDecodedInfoTypeJ instr);
 
 } // namespace
