@@ -18,6 +18,7 @@ int main() {
     }
 
     rvi::InstructionRegistry registry{};
+    rvi::RegisterOpcodeGroups(&registry);
 
     rvi::rv32i::RegisterInstructionsTypeB(&registry);
     rvi::rv32i::RegisterInstructionsTypeI(&registry);

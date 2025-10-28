@@ -146,7 +146,9 @@ public:
         InstructionDecodedInfoTypeI info = {
             .opcode = kOpcode,
             .funct3 = Oper::funct3,
+            .imm    = Oper::imm,
         };
+
         return info;
     }
 };
@@ -161,6 +163,7 @@ struct AddiOper {
     }
 
     static constexpr uint32_t funct3 = 0b000u;
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct StliOper {
@@ -173,6 +176,7 @@ struct StliOper {
     }
 
     static constexpr uint32_t funct3 = 0b010u;
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct StliuOper {
@@ -183,6 +187,7 @@ struct StliuOper {
     }
 
     static constexpr uint32_t funct3 = 0b011u;
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct XoriOper {
@@ -193,6 +198,7 @@ struct XoriOper {
     }
 
     static constexpr uint32_t funct3 = 0b100u;
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct AndiOper {
@@ -203,6 +209,7 @@ struct AndiOper {
     }
 
     static constexpr uint32_t funct3 = 0b111u;
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct OriOper {
@@ -213,6 +220,7 @@ struct OriOper {
     }
 
     static constexpr uint32_t funct3 = 0b110u;
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct SlliOper {
@@ -223,7 +231,7 @@ struct SlliOper {
     }
 
     static constexpr uint32_t funct3 = 0b001u;
-    static constexpr uint32_t funct7 = 0b0000000u; // encoded in imm[11:5]
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct SrliOper {
@@ -234,7 +242,7 @@ struct SrliOper {
     }
 
     static constexpr uint32_t funct3 = 0b101u;
-    static constexpr uint32_t funct7 = 0b0000000u; // encoded in imm[11:5]
+    static constexpr uint32_t imm = 0b0000000u;
 };
 
 struct SraiOper {
@@ -247,7 +255,7 @@ struct SraiOper {
     }
 
     static constexpr uint32_t funct3 = 0b101u;
-    static constexpr uint32_t funct7 = 0b0100000u; // encoded in imm[11:5]
+    static constexpr uint32_t imm = 0b0100000u; // encoded in imm[11:5]
 };
 
 } // anon namespace
@@ -277,6 +285,7 @@ public:
         InstructionDecodedInfoTypeI info = {
             .opcode = kOpcode,
             .funct3 = 0b000u,
+            .imm    = 0,
         };
         return info;
     }
@@ -297,6 +306,7 @@ public:
         InstructionDecodedInfoTypeI info = {
             .opcode = kOpcode,
             .funct3 = 0b000u,
+            .imm    = 1,
         };
         return info;
     }
