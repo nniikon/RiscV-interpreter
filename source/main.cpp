@@ -3,11 +3,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "rvi_instruction_type_b.hpp"
-#include "rvi_instruction_type_i.hpp"
-#include "rvi_instruction_type_r.hpp"
-#include "rvi_instruction_type_s.hpp"
-#include "rvi_instruction_type_u.hpp"
+#include "rv32i/rvi_rv32i_registration.hpp"
 
 int main() {
     rvi::ReadBinary read_binary("tests/test");
@@ -18,13 +14,8 @@ int main() {
     }
 
     rvi::InstructionRegistry registry{};
-    rvi::RegisterOpcodeGroups(&registry);
 
-    rvi::rv32i::RegisterInstructionsTypeB(&registry);
-    rvi::rv32i::RegisterInstructionsTypeI(&registry);
-    rvi::rv32i::RegisterInstructionsTypeR(&registry);
-    rvi::rv32i::RegisterInstructionsTypeS(&registry);
-    rvi::rv32i::RegisterInstructionsTypeU(&registry);
+    rvi::rv32i::RegisterRV32I(&registry);
 
     return 0;
 }

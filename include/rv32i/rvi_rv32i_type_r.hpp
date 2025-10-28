@@ -1,6 +1,8 @@
+// R-type arithmetic operations (add, sub, sll, srl, sra)
 #pragma once
 
 #include <cstdint>
+#include <memory>
 
 #include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
@@ -10,9 +12,10 @@ namespace rvi {
 namespace rv32i {
 
 template <class Oper>
-class InstructionTypeR : public IInstruction {
-    static constexpr uint32_t kOpcode = 0x33u;
+class InstructionTypeR final : public IInstruction {
 public:
+    static constexpr uint32_t kOpcode = 0x33u;
+
     ExecutionStatus Execute(InterpreterState* state) override {
         auto info = std::get<InstructionDecodedInfoTypeR>(info_);
         state->regs[info.rd] = Oper::exec(state->regs[info.rs1],
@@ -89,19 +92,34 @@ struct SraOp {
     static constexpr uint32_t funct3 = 0x5u;
     static constexpr uint32_t funct7 = 0x20u;
 };
-    
+
 using Add = InstructionTypeR<AddOp>;
 using Sub = InstructionTypeR<SubOp>;
 using Sll = InstructionTypeR<SllOp>;
 using Srl = InstructionTypeR<SrlOp>;
 using Sra = InstructionTypeR<SraOp>;
 
-void RegisterInstructionsTypeR(rvi::InstructionRegistry* registry) {
+namespace {
+
+inline void RegisterInstructionsTypeR(rvi::InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Add>()); 
     registry->RegisterInstruction(std::make_unique<Sub>());
     registry->RegisterInstruction(std::make_unique<Sll>()); 
     registry->RegisterInstruction(std::make_unique<Srl>());
     registry->RegisterInstruction(std::make_unique<Sra>());
+}
+
+inline uint32_t KeyTypeR(InstructionDecodedCommonType info) {
+    auto r = std::get<InstructionDecodedInfoTypeR>(info);
+    return (r.funct3 << 1) | (r.funct7 >> 5);
+}
+
+} // namespace
+
+inline void RegisterOpcodeGroupTypeR_Arithm(rvi::InstructionRegistry* registry) {
+    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 16u, &KeyTypeR), Add::kOpcode);
+
+    RegisterInstructionsTypeR(registry);
 }
 
 } // namespace rv32i

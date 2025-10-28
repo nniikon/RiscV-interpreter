@@ -1,17 +1,21 @@
+// S-type STORE (sb, sh, sw)
 #pragma once
+
+#include <cstdint>
+#include <memory>
 
 #include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
-#include <cassert>
 
 namespace rvi {
 namespace rv32i {
 
 template <class Oper>
-class Save : public rvi::IInstruction {
-    static constexpr uint32_t kOpcode = 0x23u;
+class Save final : public rvi::IInstruction {
 public:
+    static constexpr uint32_t kOpcode = 0x23u;
+
     ExecutionStatus Execute(InterpreterState* state) override {
         auto info = std::get<InstructionDecodedInfoTypeS>(info_);
         uint32_t addr = static_cast<uint32_t>(
@@ -59,10 +63,25 @@ using Sw = Save<SaveWord>;
 using Sh = Save<SaveHalf>;
 using Sb = Save<SaveByte>;
 
-void RegisterInstructionsTypeS(rvi::InstructionRegistry* registry) {
+namespace {
+
+inline void RegisterInstructionsTypeS(rvi::InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Sw>());
     registry->RegisterInstruction(std::make_unique<Sh>());
     registry->RegisterInstruction(std::make_unique<Sb>());
+}
+
+inline uint32_t KeyTypeS_Store(InstructionDecodedCommonType info) {
+    auto s = std::get<InstructionDecodedInfoTypeS>(info);
+    return s.funct3 & 0x7u;
+}
+
+} // namespace
+
+inline void RegisterOpcodeGroupTypeS_Store(rvi::InstructionRegistry* registry) {
+    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeS_Store), Sw::kOpcode);
+
+    RegisterInstructionsTypeS(registry);
 }
 
 } // namespace rv32i

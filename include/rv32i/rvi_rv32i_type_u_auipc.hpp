@@ -1,4 +1,8 @@
+// U-type AUIPC
 #pragma once
+
+#include <cstdint>
+#include <memory>
 
 #include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
@@ -7,30 +11,10 @@
 namespace rvi {
 namespace rv32i {
 
-class Lui : public IInstruction {
-    static constexpr uint32_t kOpcode = 0x37u;
+class Auipc final : public IInstruction {
 public:
-    ExecutionStatus Execute(InterpreterState* state) override {
-        auto info = std::get<InstructionDecodedInfoTypeU>(info_);
-        state->regs[info.rd] = static_cast<uint32_t>(info.imm);
-
-        return ExecutionStatus::Success;
-    }
-
-    const char* GetName()   const override { return "lui"; }
-    uint32_t    GetOpcode() const override { return kOpcode; }
-
-    InstructionDecodedCommonType GetDecodedInfo() const override {
-        InstructionDecodedInfoTypeU info = {
-            .opcode = kOpcode,
-        };
-        return info;
-    }
-};
-
-class Auipc : public IInstruction {
     static constexpr uint32_t kOpcode = 0x17u;
-public:
+
     ExecutionStatus Execute(InterpreterState* state) override {
         auto info = std::get<InstructionDecodedInfoTypeU>(info_);
         state->regs[info.rd] = state->pc + static_cast<uint32_t>(info.imm);
@@ -49,10 +33,23 @@ public:
     }
 };
 
-void RegisterInstructionsTypeU(rvi::InstructionRegistry* registry) {
-    registry->RegisterInstruction(std::make_unique<Lui>  ());
+namespace {
+
+inline void RegisterInstructionsTypeU_Auipc(rvi::InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Auipc>());
 }
 
-} // namespace rv32i
+inline uint32_t KeyTypeU_Auipc(InstructionDecodedCommonType /*info*/) {
+    return 0u;
+}
+
 } // namespace
+
+inline void RegisterOpcodeGroupTypeU_Auipc(rvi::InstructionRegistry* registry) {
+    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeU_Auipc), Auipc::kOpcode);
+
+    RegisterInstructionsTypeU_Auipc(registry);
+}
+
+} // namespace rv32i
+} // namespace rvi

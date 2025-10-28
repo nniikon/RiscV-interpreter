@@ -35,8 +35,4 @@ public:
     const IInstruction* GetInstruction(uint32_t instr) const;
 };
 
-// Registers per-opcode groups and their key functions.
-// Must be called before registering instructions.
-void RegisterOpcodeGroups(InstructionRegistry* registry);
-
 } // namespace

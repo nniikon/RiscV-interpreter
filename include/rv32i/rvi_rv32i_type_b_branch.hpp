@@ -1,18 +1,20 @@
+// B-type BRANCH (beq, bne, blt, bge, bltu, bgeu)
 #pragma once
+
+#include <cstdint>
+#include <memory>
 
 #include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
-#include <cstdint>
 
 namespace rvi {
 namespace rv32i {
 
 template <class Oper>
-class Branch : public IInstruction {
-    static const uint32_t kOpcode = 0x63u;
-
+class Branch final : public IInstruction {
 public:
+    static constexpr uint32_t kOpcode = 0x63u;
 
     ExecutionStatus Execute(InterpreterState* state) override {
         auto info = std::get<InstructionDecodedInfoTypeB>(info_);
@@ -39,6 +41,8 @@ public:
         return info;
     }
 };
+
+namespace {
 
 struct BeqOper {
     using type = int32_t;
@@ -89,13 +93,26 @@ using Bge  = Branch<BgeOper>;
 using Bltu = Branch<BltuOper>;
 using Bgeu = Branch<BgeuOper>;
 
-void RegisterInstructionsTypeB(InstructionRegistry* registry) {
+inline void RegisterInstructionsTypeB(InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Beq> ());
     registry->RegisterInstruction(std::make_unique<Bne> ());
     registry->RegisterInstruction(std::make_unique<Blt> ());
     registry->RegisterInstruction(std::make_unique<Bge> ());
     registry->RegisterInstruction(std::make_unique<Bltu>());
     registry->RegisterInstruction(std::make_unique<Bgeu>()); 
+}
+
+inline uint32_t KeyTypeB_Branch(InstructionDecodedCommonType info) {
+    auto b = std::get<InstructionDecodedInfoTypeB>(info);
+    return b.funct3 & 0x7u;
+}
+
+} // namespace
+
+inline void RegisterOpcodeGroupTypeB_Branch(rvi::InstructionRegistry* registry) {
+    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeB_Branch), 0x63u);
+
+    RegisterInstructionsTypeB(registry);
 }
 
 } // namespace rv32i
