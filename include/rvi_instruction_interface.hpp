@@ -20,7 +20,7 @@ public:
 
     virtual const char* GetName() const = 0;
 
-    virtual ~IInstruction() = 0;
+    virtual ~IInstruction() = default;
 
 protected:
     InstructionDecodedCommonType info_;

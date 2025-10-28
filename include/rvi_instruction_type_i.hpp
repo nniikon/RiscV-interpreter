@@ -127,11 +127,12 @@ using Lhu = Load<LoadHalfUnsignedOper>;
 using Lw  = Load<LoadWordOper>;
 
 template <class Oper>
-class Arithm : public IInstruction {
+class Arithm final : public IInstruction {
     static constexpr uint32_t kOpcode = 0x13u;
 public:
     ExecutionStatus Execute(InterpreterState* state) override {
         auto info = std::get<InstructionDecodedInfoTypeI>(info_);
+
         state->regs[info.rd] = Oper::exec(state->regs[info.rs1], static_cast<uint32_t>(info.imm));
         state->pc += 4u;
 

@@ -24,13 +24,13 @@ public:
 };
 class InstructionRegistry {
 private:
-    std::array<PerOpcodeGroup, (1 >> kOpcodeSize)> lookup_table_;
+    std::array<PerOpcodeGroup, (1u << kOpcodeSize)> lookup_table_;
 
 public:
     InstructionRegistry();
 
     bool RegisterInstruction(std::unique_ptr<IInstruction> instr);
-    bool RegisterGroup(const PerOpcodeGroup& group, uint32_t opcode);
+    bool RegisterGroup(PerOpcodeGroup group, uint32_t opcode);
     const IInstruction* GetInstruction(uint32_t instr) const;
 };
 

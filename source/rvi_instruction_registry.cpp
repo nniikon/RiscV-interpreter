@@ -8,6 +8,11 @@
 
 using namespace rvi;
 
+PerOpcodeGroup::PerOpcodeGroup()
+    : get_key_(nullptr),
+      lookup_table_() {
+}
+
 PerOpcodeGroup::PerOpcodeGroup(size_t size, GetOpcodeGroupUniqueKeyFuncPtr get_key)
     : get_key_(get_key),
       lookup_table_(size) {
@@ -52,7 +57,7 @@ bool InstructionRegistry::RegisterInstruction(std::unique_ptr<IInstruction> inst
     return lookup_table_.at(opcode).AddInstruction(std::move(instr));
 }
 
-bool InstructionRegistry::RegisterGroup(const PerOpcodeGroup& group,
+bool InstructionRegistry::RegisterGroup(PerOpcodeGroup group,
                                         uint32_t opcode) {
     if (lookup_table_.at(opcode).IsInit()) {
         LOG_F(WARNING, "Opcode group is already registered");
