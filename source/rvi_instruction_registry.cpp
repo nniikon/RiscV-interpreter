@@ -21,11 +21,15 @@ PerOpcodeGroup::PerOpcodeGroup(size_t size, GetOpcodeGroupUniqueKeyFuncPtr get_k
 bool PerOpcodeGroup::AddInstruction(std::unique_ptr<IInstruction> instr) {
     auto key = get_key_(instr->GetDecodedInfo());
 
-    if (lookup_table_.at(key).get() != nullptr)
+    auto& entry = lookup_table_.at(key);
+
+    if (entry.get() != nullptr)
         return false;
 
-    lookup_table_.at(key) = std::move(instr);
-    LOG_F(INFO, "Add instruction %s to opcode group with key %x", instr->GetName(), key);
+    entry = std::move(instr);
+    LOG_F(INFO, "Add instruction %s to opcode group with key %x",
+          entry->GetName(),
+          key);
 
     return true;
 }
