@@ -171,7 +171,7 @@ inline uint32_t KeyTypeI_Arithm(InstructionDecodedCommonType info) {
     uint32_t srai_bit = 0;
 
     if (i.funct3 == SraiOper::funct3) {
-        uint32_t srai_bit = (static_cast<uint32_t>(i.imm) >> 11); // 0 for SRLI, 1 for SRAI
+        srai_bit = (static_cast<uint32_t>(i.imm) >> 11); // 0 for SRLI, 1 for SRAI
     }
 
     return static_cast<uint32_t>((i.funct3 << 1) | srai_bit);
