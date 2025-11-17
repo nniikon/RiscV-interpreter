@@ -8,11 +8,14 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
+#include <utility>
 
 namespace rvi {
 
 using GetOpcodeGroupUniqueKeyFuncPtr = uint32_t (*)(InstructionDecodedCommonType);
 using DecodeInstructionToCommonTypeFuncPtr = InstructionDecodedCommonType (*)(uint32_t);
+using InstructionLookupResult = std::pair<const IInstruction*, InstructionDecodedCommonType>;
+
 class PerOpcodeGroup {
 private:
     GetOpcodeGroupUniqueKeyFuncPtr get_key_;
@@ -26,7 +29,7 @@ public:
                    DecodeInstructionToCommonTypeFuncPtr decode_instruction);
     bool IsInit() const;
     bool AddInstruction(std::unique_ptr<IInstruction> instr);
-    const IInstruction* GetInstruction(uint32_t instr) const;
+    InstructionLookupResult GetInstruction(uint32_t instr) const;
 };
 class InstructionRegistry {
 private:
@@ -37,7 +40,7 @@ public:
 
     bool RegisterInstruction(std::unique_ptr<IInstruction> instr);
     bool RegisterGroup(PerOpcodeGroup group, uint32_t opcode);
-    const IInstruction* GetInstruction(uint32_t instr) const;
+    InstructionLookupResult GetInstruction(uint32_t instr) const;
 };
 
 } // namespace

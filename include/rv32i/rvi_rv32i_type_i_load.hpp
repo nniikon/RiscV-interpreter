@@ -16,8 +16,8 @@ class Load final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x03u;
 
-    ExecutionStatus Execute(InterpreterState* state) const override {
-        auto info = std::get<InstructionDecodedInfoTypeI>(info_);
+    ExecutionStatus Execute(InterpreterState* state, const InstructionDecodedCommonType& decoded_info) const override {
+        const auto& info = std::get<InstructionDecodedInfoTypeI>(decoded_info);
 
         uint32_t addr = static_cast<uint32_t>(
             static_cast<int32_t>(state->regs[info.rs1]) + info.imm

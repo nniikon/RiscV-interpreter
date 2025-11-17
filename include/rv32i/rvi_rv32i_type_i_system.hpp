@@ -16,7 +16,8 @@ class Ecall final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x73u;
 
-    ExecutionStatus Execute(InterpreterState* /*state*/) const override {
+    ExecutionStatus Execute(InterpreterState* /*state*/,
+                            const InstructionDecodedCommonType& /*decoded_info*/) const override {
         assert(0);
         return ExecutionStatus::Success;
     }
@@ -38,7 +39,8 @@ class Ebreak final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x73u;
 
-    ExecutionStatus Execute(InterpreterState* /*state*/) const override {
+    ExecutionStatus Execute(InterpreterState* /*state*/,
+                            const InstructionDecodedCommonType& /*decoded_info*/) const override {
         assert(0);
         return ExecutionStatus::Success;
     }

@@ -20,9 +20,10 @@ int main() {
 
     rvi::InterpreterState state{};
 
-    for (uint32_t i = 0; i < code_view.size() / 4; i++) {
+    for (uint32_t i = 0; i < code_view.size() / sizeof(uint32_t); i++) {
         auto instr = reinterpret_cast<const uint32_t*>(code_view.data())[i];
-        registry.GetInstruction(instr)->Execute(&state);
+        auto [instruction, decoded_info] = registry.GetInstruction(instr);
+        instruction->Execute(&state, decoded_info);
     }
 
     return 0;

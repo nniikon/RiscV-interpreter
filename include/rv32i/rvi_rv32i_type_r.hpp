@@ -16,8 +16,9 @@ class InstructionTypeR final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x33u;
 
-    ExecutionStatus Execute(InterpreterState* state) const override {
-        auto info = std::get<InstructionDecodedInfoTypeR>(info_);
+    ExecutionStatus Execute(InterpreterState* state,
+                            const InstructionDecodedCommonType& decoded_info) const override {
+        const auto& info = std::get<InstructionDecodedInfoTypeR>(decoded_info);
         state->regs[info.rd] = Oper::exec(state->regs[info.rs1],
                                           state->regs[info.rs2]);
         state->pc += 4u;

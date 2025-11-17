@@ -50,7 +50,7 @@ bool PerOpcodeGroup::IsInit() const {
     return true;
 }
 
-const IInstruction* PerOpcodeGroup::GetInstruction(uint32_t instr) const {
+InstructionLookupResult PerOpcodeGroup::GetInstruction(uint32_t instr) const {
     assert(IsInit());
     auto info = decode_instruction_(instr);
     auto key = get_key_(info);
@@ -59,10 +59,10 @@ const IInstruction* PerOpcodeGroup::GetInstruction(uint32_t instr) const {
 
     if (entry.get() == nullptr) {
         LOG_F(WARNING, "No instruction for key %x in opcode group", key);
-        return nullptr;
+        return {nullptr, info};
     }
 
-    return entry.get();
+    return {entry.get(), info};
 }
 
 InstructionRegistry::InstructionRegistry()
@@ -98,7 +98,7 @@ static uint8_t get_opcode(uint32_t instruction) {
     return (uint8_t)(instruction & 0x7F);
 }
 
-const IInstruction* InstructionRegistry::GetInstruction(uint32_t instr) const {
+InstructionLookupResult InstructionRegistry::GetInstruction(uint32_t instr) const {
     auto opcode = get_opcode(instr);
 
     auto& per_opcode_group = lookup_table_[opcode];
@@ -106,7 +106,7 @@ const IInstruction* InstructionRegistry::GetInstruction(uint32_t instr) const {
         LOG_F(WARNING, "PerOpcodeGroup for instruction %x with opcode %x is not registered", instr, opcode);
         assert(0);
 
-        return nullptr;
+        return {nullptr, InstructionDecodedCommonType{}};
     }
     return per_opcode_group.GetInstruction(instr);
 }
