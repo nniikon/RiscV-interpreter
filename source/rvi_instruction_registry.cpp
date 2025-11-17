@@ -62,6 +62,8 @@ InstructionLookupResult PerOpcodeGroup::GetInstruction(uint32_t instr) const {
         return {nullptr, info};
     }
 
+    LOG_F(INFO, "Fetch instruction %s(%x) with opcode %x", entry->GetName(), instr, entry->GetOpcode());
+
     return {entry.get(), info};
 }
 
