@@ -113,7 +113,9 @@ inline uint32_t KeyTypeI_Load(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeI_Load(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeI_Load), Lb::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeI_Load, &DecodeInstructionToCommonTypeI),
+        Lb::kOpcode);
 
     RegisterInstructionsTypeI_Load(registry);
 }

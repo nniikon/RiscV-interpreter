@@ -79,7 +79,9 @@ inline uint32_t KeyTypeS_Store(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeS_Store(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeS_Store), Sw::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeS_Store, &DecodeInstructionToCommonTypeS),
+        Sw::kOpcode);
 
     RegisterInstructionsTypeS(registry);
 }

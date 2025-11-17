@@ -46,7 +46,9 @@ inline uint32_t KeyTypeI_Fence(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeI_Fence(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeI_Fence), Fence::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeI_Fence, &DecodeInstructionToCommonTypeI),
+        Fence::kOpcode);
 }
 
 } // namespace rv32i

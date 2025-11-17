@@ -46,7 +46,9 @@ inline uint32_t KeyTypeU_Lui(InstructionDecodedCommonType /*info*/) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeU_Lui(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeU_Lui), Lui::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeU_Lui, &DecodeInstructionToCommonTypeU),
+        Lui::kOpcode);
 
     RegisterInstructionsTypeU_Lui(registry);
 }

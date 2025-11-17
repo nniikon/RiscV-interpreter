@@ -12,14 +12,18 @@
 namespace rvi {
 
 using GetOpcodeGroupUniqueKeyFuncPtr = uint32_t (*)(InstructionDecodedCommonType);
+using DecodeInstructionToCommonTypeFuncPtr = InstructionDecodedCommonType (*)(uint32_t);
 class PerOpcodeGroup {
 private:
     GetOpcodeGroupUniqueKeyFuncPtr get_key_;
+    DecodeInstructionToCommonTypeFuncPtr decode_instruction_;
     std::vector<std::unique_ptr<IInstruction>> lookup_table_;
 
 public:
     PerOpcodeGroup();
-    PerOpcodeGroup(size_t size, GetOpcodeGroupUniqueKeyFuncPtr get_key);
+    PerOpcodeGroup(size_t size,
+                   GetOpcodeGroupUniqueKeyFuncPtr get_key,
+                   DecodeInstructionToCommonTypeFuncPtr decode_instruction);
     bool IsInit() const;
     bool AddInstruction(std::unique_ptr<IInstruction> instr);
     const IInstruction* GetInstruction(uint32_t instr) const;

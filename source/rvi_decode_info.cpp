@@ -95,4 +95,28 @@ InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr) {
     };
 }
 
+InstructionDecodedCommonType DecodeInstructionToCommonTypeR(uint32_t instr) {
+    return DecodeInstructionTypeR(instr);
+}
+
+InstructionDecodedCommonType DecodeInstructionToCommonTypeI(uint32_t instr) {
+    return DecodeInstructionTypeI(instr);
+}
+
+InstructionDecodedCommonType DecodeInstructionToCommonTypeS(uint32_t instr) {
+    return DecodeInstructionTypeS(instr);
+}
+
+InstructionDecodedCommonType DecodeInstructionToCommonTypeU(uint32_t instr) {
+    return DecodeInstructionTypeU(instr);
+}
+
+InstructionDecodedCommonType DecodeInstructionToCommonTypeB(uint32_t instr) {
+    return DecodeInstructionTypeB(instr);
+}
+
+InstructionDecodedCommonType DecodeInstructionToCommonTypeJ(uint32_t instr) {
+    return DecodeInstructionTypeJ(instr);
+}
+
 } // namespace rvi

@@ -46,7 +46,9 @@ inline uint32_t KeyTypeU_Auipc(InstructionDecodedCommonType /*info*/) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeU_Auipc(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeU_Auipc), Auipc::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeU_Auipc, &DecodeInstructionToCommonTypeU),
+        Auipc::kOpcode);
 
     RegisterInstructionsTypeU_Auipc(registry);
 }

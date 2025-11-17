@@ -110,7 +110,9 @@ inline uint32_t KeyTypeB_Branch(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeB_Branch(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeB_Branch), 0x63u);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeB_Branch, &DecodeInstructionToCommonTypeB),
+        0x63u);
 
     RegisterInstructionsTypeB(registry);
 }

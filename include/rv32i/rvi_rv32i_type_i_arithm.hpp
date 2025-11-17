@@ -180,7 +180,9 @@ inline uint32_t KeyTypeI_Arithm(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeI_Arithm(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 16u, &KeyTypeI_Arithm), Addi::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 16u, &KeyTypeI_Arithm, &DecodeInstructionToCommonTypeI),
+        Addi::kOpcode);
 
     RegisterInstructionsTypeI_Arithm(registry);
 }

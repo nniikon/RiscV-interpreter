@@ -56,7 +56,9 @@ inline uint32_t KeyTypeI_Jalr(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeI_Jalr(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeI_Jalr), Jalr::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 8u, &KeyTypeI_Jalr, &DecodeInstructionToCommonTypeI),
+        Jalr::kOpcode);
 
     RegisterInstructionsTypeI_Jalr(registry);
 }

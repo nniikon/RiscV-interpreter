@@ -10,11 +10,15 @@ using namespace rvi;
 
 PerOpcodeGroup::PerOpcodeGroup()
     : get_key_(nullptr),
+      decode_instruction_(nullptr),
       lookup_table_() {
 }
 
-PerOpcodeGroup::PerOpcodeGroup(size_t size, GetOpcodeGroupUniqueKeyFuncPtr get_key)
+PerOpcodeGroup::PerOpcodeGroup(size_t size,
+                               GetOpcodeGroupUniqueKeyFuncPtr get_key,
+                               DecodeInstructionToCommonTypeFuncPtr decode_instruction)
     : get_key_(get_key),
+      decode_instruction_(decode_instruction),
       lookup_table_(size) {
 }
 
@@ -35,7 +39,7 @@ bool PerOpcodeGroup::AddInstruction(std::unique_ptr<IInstruction> instr) {
 }
 
 bool PerOpcodeGroup::IsInit() const {
-    if (get_key_ == nullptr) {
+    if (get_key_ == nullptr || decode_instruction_ == nullptr) {
         assert(lookup_table_.size() == 0);
 
         return false;
@@ -47,7 +51,18 @@ bool PerOpcodeGroup::IsInit() const {
 }
 
 const IInstruction* PerOpcodeGroup::GetInstruction(uint32_t instr) const {
-    auto key = get_key_(instr);
+    assert(IsInit());
+    auto info = decode_instruction_(instr);
+    auto key = get_key_(info);
+
+    auto& entry = lookup_table_.at(key);
+
+    if (entry.get() == nullptr) {
+        LOG_F(WARNING, "No instruction for key %x in opcode group", key);
+        return nullptr;
+    }
+
+    return entry.get();
 }
 
 InstructionRegistry::InstructionRegistry()
@@ -93,5 +108,5 @@ const IInstruction* InstructionRegistry::GetInstruction(uint32_t instr) const {
 
         return nullptr;
     }
-    per_opcode_group.GetInstruction(instr).;
+    return per_opcode_group.GetInstruction(instr);
 }

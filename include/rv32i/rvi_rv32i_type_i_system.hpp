@@ -73,7 +73,9 @@ inline uint32_t KeyTypeI_System(InstructionDecodedCommonType info) {
 } // namespace
 
 inline void RegisterOpcodeGroupTypeI_System(rvi::InstructionRegistry* registry) {
-    registry->RegisterGroup(rvi::PerOpcodeGroup(/*size*/ 2u, &KeyTypeI_System), Ecall::kOpcode);
+    registry->RegisterGroup(
+        rvi::PerOpcodeGroup(/*size*/ 2u, &KeyTypeI_System, &DecodeInstructionToCommonTypeI),
+        Ecall::kOpcode);
 
     RegisterInstructionsTypeI_System(registry);
 }

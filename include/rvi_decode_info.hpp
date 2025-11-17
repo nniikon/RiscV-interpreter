@@ -73,4 +73,11 @@ InstructionDecodedInfoTypeU DecodeInstructionTypeU(uint32_t instr);
 InstructionDecodedInfoTypeB DecodeInstructionTypeB(uint32_t instr);
 InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr);
 
+InstructionDecodedCommonType DecodeInstructionToCommonTypeR(uint32_t instr);
+InstructionDecodedCommonType DecodeInstructionToCommonTypeI(uint32_t instr);
+InstructionDecodedCommonType DecodeInstructionToCommonTypeS(uint32_t instr);
+InstructionDecodedCommonType DecodeInstructionToCommonTypeU(uint32_t instr);
+InstructionDecodedCommonType DecodeInstructionToCommonTypeB(uint32_t instr);
+InstructionDecodedCommonType DecodeInstructionToCommonTypeJ(uint32_t instr);
+
 } // namespace
