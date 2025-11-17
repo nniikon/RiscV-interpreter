@@ -22,6 +22,7 @@ public:
     PerOpcodeGroup(size_t size, GetOpcodeGroupUniqueKeyFuncPtr get_key);
     bool IsInit() const;
     bool AddInstruction(std::unique_ptr<IInstruction> instr);
+    const IInstruction* GetInstruction(uint32_t instr) const;
 };
 class InstructionRegistry {
 private:

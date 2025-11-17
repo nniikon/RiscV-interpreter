@@ -16,7 +16,7 @@ class Branch final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x63u;
 
-    ExecutionStatus Execute(InterpreterState* state) override {
+    ExecutionStatus Execute(InterpreterState* state) const override {
         auto info = std::get<InstructionDecodedInfoTypeB>(info_);
 
         auto lhs = static_cast<typename Oper::type>(state->regs[info.rs1]);

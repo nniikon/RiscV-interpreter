@@ -27,7 +27,7 @@ bool PerOpcodeGroup::AddInstruction(std::unique_ptr<IInstruction> instr) {
         return false;
 
     entry = std::move(instr);
-    LOG_F(INFO, "Add instruction %s to opcode group with key %x",
+    LOG_F(INFO, "+--- " "Add instruction %6s to opcode group with key %x",
           entry->GetName(),
           key);
 
@@ -44,6 +44,10 @@ bool PerOpcodeGroup::IsInit() const {
     assert(lookup_table_.size() > 0);
 
     return true;
+}
+
+const IInstruction* PerOpcodeGroup::GetInstruction(uint32_t instr) const {
+    auto key = get_key_(instr);
 }
 
 InstructionRegistry::InstructionRegistry()
@@ -69,7 +73,25 @@ bool InstructionRegistry::RegisterGroup(PerOpcodeGroup group,
     }
 
     lookup_table_[opcode] = std::move(group);
-    LOG_F(INFO, "Add group with opcode %x", opcode);
+    LOG_F(INFO, "");
+    LOG_F(INFO, "+ Add group with opcode %x", opcode);
 
     return true;
+}
+
+static uint8_t get_opcode(uint32_t instruction) {
+    return (uint8_t)(instruction & 0x7F);
+}
+
+const IInstruction* InstructionRegistry::GetInstruction(uint32_t instr) const {
+    auto opcode = get_opcode(instr);
+
+    auto& per_opcode_group = lookup_table_[opcode];
+    if (!per_opcode_group.IsInit()) {
+        LOG_F(WARNING, "PerOpcodeGroup for instruction %x with opcode %x is not registered", instr, opcode);
+        assert(0);
+
+        return nullptr;
+    }
+    per_opcode_group.GetInstruction(instr).;
 }

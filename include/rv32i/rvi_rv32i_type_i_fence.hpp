@@ -16,7 +16,7 @@ class Fence final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x0Fu;
 
-    ExecutionStatus Execute(InterpreterState* /*state*/) override {
+    ExecutionStatus Execute(InterpreterState* /*state*/) const override {
         assert(0);
         return ExecutionStatus::Success;
     }

@@ -16,7 +16,7 @@ class Arithm final : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x13u;
 
-    ExecutionStatus Execute(InterpreterState* state) override {
+    ExecutionStatus Execute(InterpreterState* state) const override {
         auto info = std::get<InstructionDecodedInfoTypeI>(info_);
 
         state->regs[info.rd] = Oper::exec(state->regs[info.rs1], static_cast<uint32_t>(info.imm));

@@ -15,7 +15,7 @@ class Lui : public IInstruction {
 public:
     static constexpr uint32_t kOpcode = 0x37u;
 
-    ExecutionStatus Execute(InterpreterState* state) override {
+    ExecutionStatus Execute(InterpreterState* state) const override {
         auto info = std::get<InstructionDecodedInfoTypeU>(info_);
         state->regs[info.rd] = static_cast<uint32_t>(info.imm);
 
