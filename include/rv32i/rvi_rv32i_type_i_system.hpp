@@ -67,7 +67,7 @@ inline uint32_t KeyTypeI_System(InstructionDecodedCommonType info) {
     auto i = std::get<InstructionDecodedInfoTypeI>(info);
     assert(i.imm == 0 || i.imm == 1);
 
-    return i.imm;
+    return static_cast<uint32_t>(i.imm);
 }
 
 } // namespace

@@ -39,7 +39,7 @@ inline void RegisterInstructionsTypeI_Fence(rvi::InstructionRegistry* registry) 
     registry->RegisterInstruction(std::make_unique<Fence>());
 }
 
-inline uint32_t KeyTypeI_Fence(InstructionDecodedCommonType info) {
+inline uint32_t KeyTypeI_Fence(InstructionDecodedCommonType /*info*/) {
     return 0;
 }
 

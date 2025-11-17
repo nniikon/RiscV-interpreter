@@ -23,7 +23,10 @@ public:
         auto rhs = static_cast<typename Oper::type>(state->regs[info.rs2]);
 
         if (Oper::Condition(lhs, rhs)) {
-            state->pc += info.imm;
+            // Note: could overflow =)
+            state->pc = static_cast<uint32_t>(
+                static_cast<int32_t>(state->pc) + info.imm
+            );
         }
 
         return ExecutionStatus::Success;

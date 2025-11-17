@@ -54,7 +54,7 @@ struct SubOp {
 
     static uint32_t exec(uint32_t a, uint32_t b) {
         return a - b; 
-    };
+    }
 
     static constexpr uint32_t funct3 = 0x0u;
     static constexpr uint32_t funct7 = 0x20u;

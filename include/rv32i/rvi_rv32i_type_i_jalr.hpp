@@ -20,7 +20,7 @@ public:
 
         uint32_t addr = static_cast<uint32_t>(
             static_cast<int32_t>(state->regs[info.rs1]) + info.imm
-        ) & ~1;
+        ) & ~1u;
 
         uint32_t return_addr = state->pc + 4u;
         state->regs[info.rd] = return_addr;
@@ -30,7 +30,7 @@ public:
         return ExecutionStatus::Success;
     }
 
-    const char* GetName()   const override { return "jalr"; };
+    const char* GetName()   const override { return "jalr"; }
     uint32_t    GetOpcode() const override { return kOpcode; }
 
     InstructionDecodedCommonType GetDecodedInfo() const override {
@@ -49,7 +49,7 @@ inline void RegisterInstructionsTypeI_Jalr(rvi::InstructionRegistry* registry) {
     registry->RegisterInstruction(std::make_unique<Jalr>());
 }
 
-inline uint32_t KeyTypeI_Jalr(InstructionDecodedCommonType info) {
+inline uint32_t KeyTypeI_Jalr(InstructionDecodedCommonType /*info*/) {
     return 0;
 }
 
