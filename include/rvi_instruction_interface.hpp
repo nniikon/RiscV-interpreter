@@ -10,6 +10,7 @@ struct InterpreterState;
 
 enum class ExecutionStatus {
     Success = 0,
+    Exit = 1,
 };
 
 class IInstruction {

@@ -1,3 +1,4 @@
+#include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 #include "rvi_read_binary.hpp"
 #include <iomanip>
@@ -23,7 +24,13 @@ int main() {
     for (uint32_t i = 0; i < code_view.size() / sizeof(uint32_t); i++) {
         auto instr = reinterpret_cast<const uint32_t*>(code_view.data())[i];
         auto [instruction, decoded_info] = registry.GetInstruction(instr);
-        instruction->Execute(&state, decoded_info);
+        auto status = instruction->Execute(&state, decoded_info);
+        if (status == rvi::ExecutionStatus::Exit) {
+            return 0;
+        }
+        else if (status != rvi::ExecutionStatus::Success) {
+            return 1;
+        }
     }
 
     return 0;
