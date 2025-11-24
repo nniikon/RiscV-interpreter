@@ -12,9 +12,15 @@ class ReadBinary {
     std::string path_;
     MMapRO mmap_;
 public:
+    struct SectionInfo {
+        std::span<const uint8_t> section;
+        uint32_t start_offset;
+    };
+
     ReadBinary(std::string_view path);
 
-    std::span<const uint8_t> GetTextSectionView() const;
+    SectionInfo GetTextSectionView() const;
+    uint32_t                 GetStartOffset()     const;
 };
 
 } // namespace

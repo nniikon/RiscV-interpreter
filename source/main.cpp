@@ -1,10 +1,10 @@
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 #include "rvi_read_binary.hpp"
-#include <iomanip>
-#include <iostream>
 
 #include "rv32i/rvi_rv32i_registration.hpp"
+
+#include "loguru.hpp"
 
 rvi::InstructionRegistry GetReadyRegistry() {
     rvi::InstructionRegistry registry{};
@@ -15,22 +15,30 @@ rvi::InstructionRegistry GetReadyRegistry() {
 
 int main() {
     rvi::ReadBinary read_binary("tests/test");
-    auto code_view = read_binary.GetTextSectionView();
+    auto section_info = read_binary.GetTextSectionView();
+    auto code = reinterpret_cast<const uint32_t*>(section_info.section.data());
 
     auto registry = GetReadyRegistry();
 
-    rvi::InterpreterState state{};
+    {
+        for (size_t i = 0; i < section_info.section.size(); i++) {
+            auto [instr_interface, decoded_info] = registry.GetInstruction(code[i]);
+            LOG_F(INFO, "[%x] %x - %s ", sizeof(uint32_t) * i, code[i], instr_interface->GetName());
+        }
+    }
 
-    for (uint32_t i = 0; i < code_view.size() / sizeof(uint32_t); i++) {
-        auto instr = reinterpret_cast<const uint32_t*>(code_view.data())[i];
-        auto [instruction, decoded_info] = registry.GetInstruction(instr);
-        auto status = instruction->Execute(&state, decoded_info);
-        if (status == rvi::ExecutionStatus::Exit) {
-            return 0;
-        }
-        else if (status != rvi::ExecutionStatus::Success) {
-            return 1;
-        }
+
+    rvi::InterpreterState state{};
+    state.pc = section_info.start_offset;
+
+    rvi::ExecutionStatus status = rvi::ExecutionStatus::Success;
+    while (status == rvi::ExecutionStatus::Success) {
+        auto instr_raw = code[state.pc];
+
+        LOG_F(INFO, "Decoding instruction with pc = %x", state.pc);
+        auto [instr_interface, decoded_info] = registry.GetInstruction(instr_raw);
+
+        status = instr_interface->Execute(&state, decoded_info);
     }
 
     return 0;

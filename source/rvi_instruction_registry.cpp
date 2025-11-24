@@ -50,6 +50,10 @@ bool PerOpcodeGroup::IsInit() const {
     return true;
 }
 
+static uint8_t get_opcode(uint32_t instruction) {
+    return (uint8_t)(instruction & 0x7F);
+}
+
 InstructionLookupResult PerOpcodeGroup::GetInstruction(uint32_t instr) const {
     assert(IsInit());
     auto info = decode_instruction_(instr);
@@ -62,7 +66,7 @@ InstructionLookupResult PerOpcodeGroup::GetInstruction(uint32_t instr) const {
         return {nullptr, info};
     }
 
-    LOG_F(INFO, "Fetch instruction %s(%x) with opcode %x", entry->GetName(), instr, entry->GetOpcode());
+    LOG_F(INFO, "Fetch instruction %s(%x) with opcode %x, key %x, while real opcode is %x", entry->GetName(), instr, entry->GetOpcode(), key, get_opcode(instr));
 
     return {entry.get(), info};
 }
@@ -94,10 +98,6 @@ bool InstructionRegistry::RegisterGroup(PerOpcodeGroup group,
     LOG_F(INFO, "+ Add group with opcode %x", opcode);
 
     return true;
-}
-
-static uint8_t get_opcode(uint32_t instruction) {
-    return (uint8_t)(instruction & 0x7F);
 }
 
 InstructionLookupResult InstructionRegistry::GetInstruction(uint32_t instr) const {

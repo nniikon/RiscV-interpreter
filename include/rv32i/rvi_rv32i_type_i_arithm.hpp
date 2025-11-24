@@ -8,6 +8,8 @@
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 
+#include "loguru.hpp"
+
 namespace rvi {
 namespace rv32i {
 
@@ -171,9 +173,13 @@ inline uint32_t KeyTypeI_Arithm(InstructionDecodedCommonType info) {
     auto i = std::get<InstructionDecodedInfoTypeI>(info);
     uint32_t srai_bit = 0;
 
+
     if (i.funct3 == SraiOper::funct3) {
         srai_bit = (static_cast<uint32_t>(i.imm) >> 11); // 0 for SRLI, 1 for SRAI
     }
+
+    LOG_F(INFO, "funct3 = %x", i.funct3);
+    LOG_F(INFO, "srai_bit = %x", srai_bit);
 
     return static_cast<uint32_t>((i.funct3 << 1) | srai_bit);
 }

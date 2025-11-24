@@ -6,7 +6,7 @@
 #include <fstream>
 #include <vector>
 
-bool rvi::elf::GetTextSectionOffsetSize(std::string_view path, uint32_t& out_offset, uint32_t& out_size) {
+bool rvi::elf::GetTextSectionOffsetSize(std::string_view path, uint32_t* out_offset, uint32_t* out_size, uint32_t* start_offset) {
     std::ifstream f(path.data(), std::ios::binary);
     if (!f) return false;
 
@@ -44,8 +44,9 @@ bool rvi::elf::GetTextSectionOffsetSize(std::string_view path, uint32_t& out_off
 
         const char* name = &shstrtab[sh.sh_name];
         if (std::strcmp(name, ".text") == 0) {
-            out_offset = sh.sh_offset;
-            out_size   = sh.sh_size;
+            *out_offset = sh.sh_offset;
+            *out_size   = sh.sh_size;
+            *start_offset = eh.e_entry - sh.sh_addr;
             return true;
         }
     }
