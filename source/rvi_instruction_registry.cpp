@@ -62,7 +62,7 @@ InstructionLookupResult PerOpcodeGroup::GetInstruction(uint32_t instr) const {
     auto& entry = lookup_table_.at(key);
 
     if (entry.get() == nullptr) {
-        LOG_F(WARNING, "No instruction for key %x in opcode group", key);
+        LOG_F(WARNING, "No instruction %x for key %x in opcode group", instr, key);
         return {nullptr, info};
     }
 

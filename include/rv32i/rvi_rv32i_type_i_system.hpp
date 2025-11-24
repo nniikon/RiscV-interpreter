@@ -74,6 +74,7 @@ private:
     ExecutionStatus Exit(InterpreterState* state) const {
         std::fflush(stdout);
         state->pc += 4u;
+        state->return_code = state->regs.Get(10); // a0
         return ExecutionStatus::Exit;
     }
 

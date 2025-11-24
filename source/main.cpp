@@ -33,5 +33,7 @@ int main() {
         status = instr_interface->Execute(&state, decoded_info);
     }
 
-    return 0;
+    LOG_F(INFO, "Program exit with code %u", state.return_code);
+
+    return state.return_code;
 }
