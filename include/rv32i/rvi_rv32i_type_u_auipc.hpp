@@ -20,6 +20,8 @@ public:
         const auto& info = std::get<InstructionDecodedInfoTypeU>(decoded_info);
         state->regs.Set(info.rd, state->pc + static_cast<uint32_t>(info.imm));
 
+        state->pc += 4u;
+
         return ExecutionStatus::Success;
     }
 

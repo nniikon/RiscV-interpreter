@@ -22,7 +22,14 @@ public:
                             const InstructionDecodedCommonType& decoded_info) const override {
         const auto& info = std::get<InstructionDecodedInfoTypeI>(decoded_info);
 
-        state->regs.Set(info.rd, Oper::exec(state->regs.Get(info.rs1), static_cast<uint32_t>(info.imm)));
+        using lhs_type = typename Oper::value_type;
+        using rhs_type = typename Oper::imm_type;
+
+        lhs_type lhs = static_cast<lhs_type>(state->regs.Get(info.rs1));
+        rhs_type rhs = Oper::GetImm(info);
+
+        auto result = Oper::exec(lhs, rhs);
+        state->regs.Set(info.rd, static_cast<uint32_t>(result));
         state->pc += 4u;
 
         return ExecutionStatus::Success;
@@ -45,10 +52,16 @@ public:
 namespace {
 
 struct AddiOper {
+    using value_type = int32_t;
+    using imm_type = int32_t;
     constexpr static const char* const name = "addi";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a + b;
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return info.imm;
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs + rhs;
     }
 
     static constexpr uint32_t funct3 = 0b000u;
@@ -56,12 +69,16 @@ struct AddiOper {
 };
 
 struct StliOper {
+    using value_type = int32_t;
+    using imm_type = int32_t;
     constexpr static const char* const name = "stli";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        auto a_i = static_cast<int32_t>(a);
-        auto b_i = static_cast<int32_t>(b);
-        return a_i < b_i ? 1 : 0;
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return info.imm;
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs < rhs ? 1 : 0;
     }
 
     static constexpr uint32_t funct3 = 0b010u;
@@ -69,10 +86,16 @@ struct StliOper {
 };
 
 struct StliuOper {
+    using value_type = uint32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "stliu";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a < b ? 1 : 0;
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm);
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs < rhs ? 1 : 0;
     }
 
     static constexpr uint32_t funct3 = 0b011u;
@@ -80,10 +103,16 @@ struct StliuOper {
 };
 
 struct XoriOper {
+    using value_type = uint32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "xori";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a ^ b;
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm);
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs ^ rhs;
     }
 
     static constexpr uint32_t funct3 = 0b100u;
@@ -91,10 +120,16 @@ struct XoriOper {
 };
 
 struct AndiOper {
+    using value_type = uint32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "andi";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a & b;
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm);
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs & rhs;
     }
 
     static constexpr uint32_t funct3 = 0b111u;
@@ -102,10 +137,16 @@ struct AndiOper {
 };
 
 struct OriOper {
+    using value_type = uint32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "ori";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a | b;
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm);
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs | rhs;
     }
 
     static constexpr uint32_t funct3 = 0b110u;
@@ -113,10 +154,16 @@ struct OriOper {
 };
 
 struct SlliOper {
+    using value_type = uint32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "slli";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a << (b & 0x1Fu);
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm) & 0x1Fu;
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs << rhs;
     }
 
     static constexpr uint32_t funct3 = 0b001u;
@@ -124,10 +171,16 @@ struct SlliOper {
 };
 
 struct SrliOper {
+    using value_type = uint32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "srli";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return a >> (b & 0x1Fu);
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm) & 0x1Fu;
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs >> rhs;
     }
 
     static constexpr uint32_t funct3 = 0b101u;
@@ -135,12 +188,16 @@ struct SrliOper {
 };
 
 struct SraiOper {
+    using value_type = int32_t;
+    using imm_type = uint32_t;
     constexpr static const char* const name = "srai";
 
-    static uint32_t exec(uint32_t a, uint32_t b) {
-        return static_cast<uint32_t>(
-            static_cast<int>(a) >> (b & 0x1Fu)
-        );
+    static imm_type GetImm(const InstructionDecodedInfoTypeI& info) {
+        return static_cast<uint32_t>(info.imm) & 0x1Fu;
+    }
+
+    static value_type exec(value_type lhs, imm_type rhs) {
+        return lhs >> rhs;
     }
 
     static constexpr uint32_t funct3 = 0b101u;
@@ -175,7 +232,7 @@ inline uint32_t KeyTypeI_Arithm(InstructionDecodedCommonType info) {
 
 
     if (i.funct3 == SraiOper::funct3) {
-        srai_bit = (static_cast<uint32_t>(i.imm) >> 11); // 0 for SRLI, 1 for SRAI
+        srai_bit = (static_cast<uint32_t>(i.imm) >> 10); // 0 for SRLI, 1 for SRAI
     }
 
     return static_cast<uint32_t>((i.funct3 << 1) | srai_bit);

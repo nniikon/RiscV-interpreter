@@ -29,6 +29,9 @@ public:
                 static_cast<int32_t>(state->pc) + info.imm
             );
         }
+        else {
+            state->pc += 4u;
+        }
 
         return ExecutionStatus::Success;
     }
