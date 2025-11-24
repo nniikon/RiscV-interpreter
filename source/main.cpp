@@ -5,6 +5,8 @@
 #include "rv32i/rvi_rv32i_registration.hpp"
 
 #include "loguru.hpp"
+#include "cxxopts.hpp"
+#include <iostream>
 
 rvi::InstructionRegistry GetReadyRegistry() {
     rvi::InstructionRegistry registry{};
@@ -13,8 +15,21 @@ rvi::InstructionRegistry GetReadyRegistry() {
     return registry;
 }
 
-int main() {
-    rvi::ReadBinary read_binary("tests/test");
+int main(const int argc, const char* const* argv) {
+    cxxopts::Options options("rvi", "RiscV Intepreter");
+    options.add_options()
+        ("input", "Executable elf file", cxxopts::value<std::string>())
+        ("args", "Executable args", cxxopts::value<std::vector<std::string>>());
+
+    options.parse_positional({"input", "args"});
+    auto result = options.parse(argc, argv);
+
+    if (!result.count("input")) {
+        std::cout << options.help() << std::endl;
+        return 1;
+    }
+
+    rvi::ReadBinary read_binary(result["input"].as<std::string>());
     auto section_info = read_binary.GetTextSectionView();
     auto code = reinterpret_cast<const uint32_t*>(section_info.section.data());
 

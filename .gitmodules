@@ -1,3 +1,6 @@
 [submodule "external/loguru"]
 	path = external/loguru
 	url = https://github.com/emilk/loguru.git
+[submodule "external/cxxopts"]
+	path = external/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git

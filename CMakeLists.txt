@@ -94,6 +94,9 @@ target_include_directories(rvi PUBLIC
 target_include_directories(rvi PRIVATE
   ${PROJECT_SOURCE_DIR}/external/loguru
 )
+target_include_directories(rvi PRIVATE
+  ${PROJECT_SOURCE_DIR}/external/cxxopts/include
+)
 
 target_compile_options(rvi PRIVATE
     $<$<CONFIG:Debug>:${DEBUG_FLAGS}>
