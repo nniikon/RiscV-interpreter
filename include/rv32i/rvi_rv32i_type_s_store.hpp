@@ -20,10 +20,10 @@ public:
                             const InstructionDecodedCommonType& decoded_info) const override {
         const auto& info = std::get<InstructionDecodedInfoTypeS>(decoded_info);
         uint32_t addr = static_cast<uint32_t>(
-            static_cast<int32_t>(state->regs[info.rs1]) + info.imm
+            static_cast<int32_t>(state->regs.Get(info.rs1)) + info.imm
         );
 
-        typename Oper::type value = static_cast<typename Oper::type>(state->regs[info.rs2]);
+        typename Oper::type value = static_cast<typename Oper::type>(state->regs.Get(info.rs2));
         state->memory.Set<typename Oper::type>(addr, value);
 
         state->pc += 4u;

@@ -18,7 +18,7 @@ public:
     ExecutionStatus Execute(InterpreterState* state,
                             const InstructionDecodedCommonType& decoded_info) const override {
         const auto& info = std::get<InstructionDecodedInfoTypeU>(decoded_info);
-        state->regs[info.rd] = state->pc + static_cast<uint32_t>(info.imm);
+        state->regs.Set(info.rd, state->pc + static_cast<uint32_t>(info.imm));
 
         return ExecutionStatus::Success;
     }

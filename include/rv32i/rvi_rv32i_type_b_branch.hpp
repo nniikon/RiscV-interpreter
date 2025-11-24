@@ -20,8 +20,8 @@ public:
                             const InstructionDecodedCommonType& decoded_info) const override {
         const auto& info = std::get<InstructionDecodedInfoTypeB>(decoded_info);
 
-        auto lhs = static_cast<typename Oper::type>(state->regs[info.rs1]);
-        auto rhs = static_cast<typename Oper::type>(state->regs[info.rs2]);
+        auto lhs = static_cast<typename Oper::type>(state->regs.Get(info.rs1));
+        auto rhs = static_cast<typename Oper::type>(state->regs.Get(info.rs2));
 
         if (Oper::Condition(lhs, rhs)) {
             // Note: could overflow =)

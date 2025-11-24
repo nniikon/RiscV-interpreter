@@ -20,11 +20,11 @@ public:
         const auto& info = std::get<InstructionDecodedInfoTypeI>(decoded_info);
 
         uint32_t addr = static_cast<uint32_t>(
-            static_cast<int32_t>(state->regs[info.rs1]) + info.imm
+            static_cast<int32_t>(state->regs.Get(info.rs1)) + info.imm
         ) & ~1u;
 
         uint32_t return_addr = state->pc + 4u;
-        state->regs[info.rd] = return_addr;
+        state->regs.Set(info.rd, return_addr);
 
         state->pc = addr;
 

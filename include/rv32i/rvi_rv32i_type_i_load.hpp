@@ -20,16 +20,16 @@ public:
         const auto& info = std::get<InstructionDecodedInfoTypeI>(decoded_info);
 
         uint32_t addr = static_cast<uint32_t>(
-            static_cast<int32_t>(state->regs[info.rs1]) + info.imm
+            static_cast<int32_t>(state->regs.Get(info.rs1)) + info.imm
         );
 
         auto value = state->memory.Get<typename Oper::type>(addr);
 
         if constexpr (Oper::need_sex) {
             int32_t sex_value = static_cast<int32_t>(value);
-            state->regs[info.rd] = static_cast<uint32_t>(sex_value);
+            state->regs.Set(info.rd, static_cast<uint32_t>(sex_value));
         } else {
-            state->regs[info.rd] = static_cast<uint32_t>(value);
+            state->regs.Set(info.rd, static_cast<uint32_t>(value));
         }
 
         state->pc += 4u;

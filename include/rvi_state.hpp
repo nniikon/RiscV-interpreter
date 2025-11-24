@@ -1,14 +1,13 @@
 #pragma once
 
-#include "rvi_config.hpp"
 #include "rvi_memory_state.hpp"
-#include <array>
+#include "rvi_registers.hpp"
 #include <cstdint>
 
 namespace rvi {
 
 struct InterpreterState {
-    std::array<uint32_t, kNumRegs> regs;
+    InterpreterRegisters regs;
     uint32_t pc;
     InterpreterMemoryModel memory;
 };

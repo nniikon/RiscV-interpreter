@@ -19,8 +19,9 @@ public:
     ExecutionStatus Execute(InterpreterState* state,
                             const InstructionDecodedCommonType& decoded_info) const override {
         const auto& info = std::get<InstructionDecodedInfoTypeR>(decoded_info);
-        state->regs[info.rd] = Oper::exec(state->regs[info.rs1],
-                                          state->regs[info.rs2]);
+        state->regs.Set(info.rd,
+                        Oper::exec(state->regs.Get(info.rs1),
+                                   state->regs.Get(info.rs2)));
         state->pc += 4u;
 
         return ExecutionStatus::Success;

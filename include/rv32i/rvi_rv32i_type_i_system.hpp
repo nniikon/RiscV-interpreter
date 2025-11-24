@@ -27,11 +27,11 @@ class Ecall final : public IInstruction {
 
 private:
     ExecutionStatus Read(InterpreterState* state) const {
-        auto fd = state->regs[10]; // a0
+        auto fd = state->regs.Get(10); // a0
         assert(fd == 0);           // Only stdin is supported
 
-        auto str = static_cast<uint32_t>(state->regs[11]); // a1
-        auto len = static_cast<uint32_t>(state->regs[12]); // a2
+        auto str = static_cast<uint32_t>(state->regs.Get(11)); // a1
+        auto len = static_cast<uint32_t>(state->regs.Get(12)); // a2
 
         uint32_t bytes_read = 0;
         while (bytes_read < len) {
@@ -43,18 +43,18 @@ private:
             ++bytes_read;
         }
 
-        state->regs[10] = bytes_read;
+        state->regs.Set(10, bytes_read);
         state->pc += 4u;
 
         return ExecutionStatus::Success;
     }
 
     ExecutionStatus Write(InterpreterState* state) const {
-        auto fd = state->regs[10]; // a0
+        auto fd = state->regs.Get(10); // a0
         assert(fd == 1);           // Only stdout is supported
 
-        auto str = static_cast<uint32_t>(state->regs[11]); // a1
-        auto len = static_cast<uint32_t>(state->regs[12]); // a2
+        auto str = static_cast<uint32_t>(state->regs.Get(11)); // a1
+        auto len = static_cast<uint32_t>(state->regs.Get(12)); // a2
 
         uint32_t bytes_written = 0;
         while (bytes_written < len) {
@@ -65,7 +65,7 @@ private:
         }
 
         std::fflush(stdout);
-        state->regs[10] = bytes_written;
+        state->regs.Set(10, bytes_written);
         state->pc += 4u;
 
         return ExecutionStatus::Success;
@@ -82,7 +82,7 @@ public:
 
     ExecutionStatus Execute(InterpreterState* state,
                             const InstructionDecodedCommonType& /* decoded_info */) const override {
-        auto arg = static_cast<EcallArgs>(state->regs[17]); // a7
+        auto arg = static_cast<EcallArgs>(state->regs.Get(17)); // a7
         switch (arg) {
             case EcallArgs::Read:
                 return Read(state);
