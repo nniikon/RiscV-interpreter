@@ -20,22 +20,14 @@ int main() {
 
     auto registry = GetReadyRegistry();
 
-    {
-        for (size_t i = 0; i < section_info.section.size(); i++) {
-            auto [instr_interface, decoded_info] = registry.GetInstruction(code[i]);
-            LOG_F(INFO, "[%x] %x - %s ", sizeof(uint32_t) * i, code[i], instr_interface->GetName());
-        }
-    }
-
-
     rvi::InterpreterState state{};
     state.pc = section_info.start_offset;
 
     rvi::ExecutionStatus status = rvi::ExecutionStatus::Success;
     while (status == rvi::ExecutionStatus::Success) {
-        auto instr_raw = code[state.pc];
+        LOG_F(INFO, "[pc = %x]", state.pc);
+        auto instr_raw = code[state.pc / 4];
 
-        LOG_F(INFO, "Decoding instruction with pc = %x", state.pc);
         auto [instr_interface, decoded_info] = registry.GetInstruction(instr_raw);
 
         status = instr_interface->Execute(&state, decoded_info);
