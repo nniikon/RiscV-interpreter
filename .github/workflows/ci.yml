@@ -1,0 +1,22 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    container: nniikon/rvinterpreter:9b8ee24db15d09477630fe66ba0299581fe07d57
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Build
+      run: |
+        cmake -B build -S .
+        cmake --build build --parallel
+
+    - name: Run tests
+      run: cd tests && python3 run_tests.py
