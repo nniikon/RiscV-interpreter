@@ -10,7 +10,7 @@ struct InterpreterState {
     InterpreterRegisters regs;
     uint32_t pc;
     InterpreterMemoryModel memory;
-    uint32_t return_code;
+    int32_t return_code;
 };
 
 } // namespace

@@ -8,12 +8,14 @@
 #include "cxxopts.hpp"
 #include <iostream>
 
-rvi::InstructionRegistry GetReadyRegistry() {
-    rvi::InstructionRegistry registry{};
+namespace {
+    rvi::InstructionRegistry GetReadyRegistry() {
+        rvi::InstructionRegistry registry{};
 
-    rvi::rv32i::RegisterRV32I(&registry);
-    return registry;
-}
+        rvi::rv32i::RegisterRV32I(&registry);
+        return registry;
+    }
+} // namespace
 
 int main(const int argc, const char* const* argv) {
     cxxopts::Options options("rvi", "RiscV Intepreter");
@@ -48,7 +50,7 @@ int main(const int argc, const char* const* argv) {
         status = instr_interface->Execute(&state, decoded_info);
     }
 
-    LOG_F(INFO, "Program exit with code %u", state.return_code);
+    LOG_F(INFO, "Program exit with code %i", state.return_code);
 
     return state.return_code;
 }

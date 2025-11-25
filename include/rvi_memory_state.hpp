@@ -33,14 +33,14 @@ T InterpreterMemoryModel::Get(uint32_t address) const {
     T value{};
     std::memcpy(&value, &memory_[address], sizeof(T));
 
-    LOG_F(INFO, "Getting mem[%x] = %x", address, value);
+    LOG_F(INFO, "Getting mem[%x] = %x", address, static_cast<unsigned int>(value));
 
     return value;
 }
 
 template <typename T>
 void InterpreterMemoryModel::Set(uint32_t address, T value) {
-    LOG_F(INFO, "Setting mem[%x] = %x", address, value);
+    LOG_F(INFO, "Setting mem[%x] = %x", address, static_cast<unsigned int>(value));
 
     std::memcpy(&memory_[address], &value, sizeof(T));
 }

@@ -94,7 +94,7 @@ bool InstructionRegistry::RegisterGroup(PerOpcodeGroup group,
     }
 
     lookup_table_[opcode] = std::move(group);
-    LOG_F(INFO, "");
+    LOG_F(INFO, " ");
     LOG_F(INFO, "+ Add group with opcode %x", opcode);
 
     return true;
