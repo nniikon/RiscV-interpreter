@@ -5,11 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(DEBUG_FLAGS
+set(DEBUG_COMMON_FLAGS
     -D_DEBUG
     -ggdb3
     -std=c++20
-    -Wdocumentation -Wdocumentation-unknown-command
     -O0
     -Wall
     -Wextra
@@ -35,9 +34,7 @@ set(DEBUG_FLAGS
     -Winit-self
     -Wredundant-decls
     -Wshadow
-    -Wshadow-all
     -Wextra-semi
-    -Wheader-hygiene
     -Wsign-conversion
     -Wsign-promo
     -Wstrict-overflow=2
@@ -46,14 +43,11 @@ set(DEBUG_FLAGS
     -Wswitch-enum
     -Wundef
     -Wunreachable-code
-    -Wextra-semi
-    -Wheader-hygiene
     -Wunused
     -Wvariadic-macros
     -Wno-missing-field-initializers
     -Wfloat-conversion
     -Wdouble-promotion
-    -Wcomma
     -Wno-narrowing
     -Wno-old-style-cast
     -Wno-varargs
@@ -99,7 +93,7 @@ target_include_directories(rvi PRIVATE
 )
 
 target_compile_options(rvi PRIVATE
-    $<$<CONFIG:Debug>:${DEBUG_FLAGS}>
+    $<$<CONFIG:Debug>:${DEBUG_COMMON_FLAGS}>
 )
 
 target_link_options(rvi PRIVATE
