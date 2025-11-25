@@ -4,7 +4,6 @@
 
 #include "rv32i/rvi_rv32i_type_b_branch.hpp"
 #include "rv32i/rvi_rv32i_type_r.hpp"
-#include "rv32i/rvi_rv32i_type_r_compare.hpp"
 #include "rv32i/rvi_rv32i_type_s_store.hpp"
 #include "rv32i/rvi_rv32i_type_u_lui.hpp"
 #include "rv32i/rvi_rv32i_type_u_auipc.hpp"
@@ -19,7 +18,6 @@ using namespace rvi;
 
 void rvi::rv32i::RegisterRV32I(InstructionRegistry* registry) {
     rv32i::RegisterOpcodeGroupTypeR_Arithm  (registry);
-    rv32i::RegisterInstructionsTypeR_Compare(registry);
     rv32i::RegisterOpcodeGroupTypeI_Arithm  (registry);
     rv32i::RegisterOpcodeGroupTypeI_Load    (registry);
     rv32i::RegisterOpcodeGroupTypeS_Store   (registry);
