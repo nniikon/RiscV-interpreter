@@ -3,18 +3,20 @@
 #include "rvi_read_binary.hpp"
 
 #include "rv32i/rvi_rv32i_registration.hpp"
+#include "rv32m/rvi_rv32m_registration.hpp"
 
 #include "loguru.hpp"
 #include "cxxopts.hpp"
 #include <iostream>
 
 namespace {
-    rvi::InstructionRegistry GetReadyRegistry() {
-        rvi::InstructionRegistry registry{};
+rvi::InstructionRegistry GetReadyRegistry() {
+    rvi::InstructionRegistry registry{};
 
-        rvi::rv32i::RegisterRV32I(&registry);
-        return registry;
-    }
+    rvi::rv32i::RegisterRV32I(&registry);
+    rvi::rv32m::RegisterRV32M(&registry);
+    return registry;
+}
 } // namespace
 
 int main(const int argc, const char* const* argv) {
