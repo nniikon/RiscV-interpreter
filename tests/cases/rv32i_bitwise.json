@@ -1,0 +1,23 @@
+{
+  "binary": "rv32i_bitwise",
+  "cases": [
+    {
+      "name": "mask_and_mix",
+      "stdin_hex": "0f0f0f0f33333333",
+      "stdout_hex": "030303033f3f3f3f3c3c3c3cf0f0f0f0",
+      "exit_code": 0
+    },
+    {
+      "name": "all_ones",
+      "stdin_hex": "ffffffff00000000",
+      "stdout_hex": "00000000ffffffffffffffff00000000",
+      "exit_code": 0
+    },
+    {
+      "name": "alternating",
+      "stdin_hex": "aaaaaaaa55555555",
+      "stdout_hex": "00000000ffffffffffffffff55555555",
+      "exit_code": 0
+    }
+  ]
+}

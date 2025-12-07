@@ -1,0 +1,17 @@
+{
+  "binary": "rv32i_memory",
+  "cases": [
+    {
+      "name": "balanced",
+      "stdin_hex": "ffffffff010000009cffffff6400000018fcffffe8030000",
+      "stdout_hex": "00000000",
+      "exit_code": 0
+    },
+    {
+      "name": "offsets",
+      "stdin_hex": "ecffffff320000000cfeffff58020000e0b1ffff20a10700",
+      "stdout_hex": "084e1d00",
+      "exit_code": 0
+    }
+  ]
+}

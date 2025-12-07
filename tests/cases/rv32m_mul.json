@@ -1,0 +1,65 @@
+{
+  "binary": "rv32m_mul",
+  "cases": [
+    {
+      "name": "zeros",
+      "stdin_hex": "0000000000000000",
+      "stdout_hex": "00000000000000000000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "small",
+      "stdin_hex": "0100000002000000",
+      "stdout_hex": "02000000000000000000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "neg_one_times_one",
+      "stdin_hex": "ffffffff01000000",
+      "stdout_hex": "ffffffffffffffff00000000ffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "neg_one_times_neg_one",
+      "stdin_hex": "ffffffffffffffff",
+      "stdout_hex": "0100000000000000feffffffffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "pos_pair",
+      "stdin_hex": "39300000851a0000",
+      "stdout_hex": "9dd7fe04000000000000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "neg_pos_pair",
+      "stdin_hex": "c7cfffff851a0000",
+      "stdout_hex": "632801fbffffffff841a0000ffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "max_int_times_two",
+      "stdin_hex": "ffffff7f02000000",
+      "stdout_hex": "feffffff000000000000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "min_int_times_two",
+      "stdin_hex": "0000008002000000",
+      "stdout_hex": "00000000ffffffff01000000ffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "max_int_square",
+      "stdin_hex": "ffffff7fffffff7f",
+      "stdout_hex": "01000000ffffff3fffffff3fffffff3f",
+      "exit_code": 0
+    },
+    {
+      "name": "min_int_square",
+      "stdin_hex": "0000008000000080",
+      "stdout_hex": "000000000000004000000040000000c0",
+      "exit_code": 0
+    }
+  ]
+}
