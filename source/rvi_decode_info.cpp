@@ -33,6 +33,18 @@ InstructionDecodedInfoTypeR DecodeInstructionTypeR(uint32_t instr) {
     };
 }
 
+InstructionDecodedInfoTypeR4 DecodeInstructionTypeR4(uint32_t instr) {
+    return {
+        bits(instr, 6,  0),
+        bits(instr, 11, 7),
+        bits(instr, 14, 12),
+        bits(instr, 19, 15),
+        bits(instr, 24, 20),
+        bits(instr, 31, 27),
+        bits(instr, 26, 25)
+    };
+}
+
 InstructionDecodedInfoTypeI DecodeInstructionTypeI(uint32_t instr) {
     const uint32_t imm12 = bits(instr, 31, 20);
     return {
@@ -97,6 +109,10 @@ InstructionDecodedInfoTypeJ DecodeInstructionTypeJ(uint32_t instr) {
 
 InstructionDecodedCommonType DecodeInstructionToCommonTypeR(uint32_t instr) {
     return DecodeInstructionTypeR(instr);
+}
+
+InstructionDecodedCommonType DecodeInstructionToCommonTypeR4(uint32_t instr) {
+    return DecodeInstructionTypeR4(instr);
 }
 
 InstructionDecodedCommonType DecodeInstructionToCommonTypeI(uint32_t instr) {
