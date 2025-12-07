@@ -1,0 +1,11 @@
+{
+  "binary": "test_div",
+  "cases": [
+    {
+      "name": "baseline",
+      "stdin_hex": "",
+      "stdout_hex": "",
+      "exit_code": 0
+    }
+  ]
+}

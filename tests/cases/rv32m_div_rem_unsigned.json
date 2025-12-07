@@ -1,0 +1,65 @@
+{
+  "binary": "rv32m_div_rem_unsigned",
+  "cases": [
+    {
+      "name": "zero_div_one",
+      "stdin_hex": "0000000001000000",
+      "stdout_hex": "0000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "ten_div_three",
+      "stdin_hex": "0a00000003000000",
+      "stdout_hex": "0300000001000000",
+      "exit_code": 0
+    },
+    {
+      "name": "max_div_one",
+      "stdin_hex": "ffffffff01000000",
+      "stdout_hex": "ffffffff00000000",
+      "exit_code": 0
+    },
+    {
+      "name": "max_div_two",
+      "stdin_hex": "ffffffff02000000",
+      "stdout_hex": "ffffff7f01000000",
+      "exit_code": 0
+    },
+    {
+      "name": "max_div_min",
+      "stdin_hex": "ffffffff00000080",
+      "stdout_hex": "01000000ffffff7f",
+      "exit_code": 0
+    },
+    {
+      "name": "min_div_two",
+      "stdin_hex": "0000008002000000",
+      "stdout_hex": "0000004000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "zero_div_five",
+      "stdin_hex": "0000000005000000",
+      "stdout_hex": "0000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "randomish",
+      "stdin_hex": "7856341211110000",
+      "stdout_hex": "1211010046020000",
+      "exit_code": 0
+    },
+    {
+      "name": "div_by_zero",
+      "stdin_hex": "7856341200000000",
+      "stdout_hex": "ffffffff78563412",
+      "exit_code": 0
+    },
+    {
+      "name": "zero_div_zero",
+      "stdin_hex": "0000000000000000",
+      "stdout_hex": "ffffffff00000000",
+      "exit_code": 0
+    }
+  ]
+}

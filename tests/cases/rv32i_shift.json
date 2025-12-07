@@ -1,0 +1,23 @@
+{
+  "binary": "rv32i_shift",
+  "cases": [
+    {
+      "name": "edge_shifts",
+      "stdin_hex": "0100000000000000000000801f000000ffffffff8000000001000000",
+      "stdout_hex": "0100000001000000ffffffff40000000",
+      "exit_code": 0
+    },
+    {
+      "name": "left_three",
+      "stdin_hex": "01000000030000001000000002000000fcffffff7f00000003000000",
+      "stdout_hex": "0800000004000000ffffffff0f000000",
+      "exit_code": 0
+    },
+    {
+      "name": "high_bit",
+      "stdin_hex": "010000001f000000ffffff7f01000000000000808100000007000000",
+      "stdout_hex": "00000080ffffff3f000000c001000000",
+      "exit_code": 0
+    }
+  ]
+}

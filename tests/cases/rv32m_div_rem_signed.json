@@ -1,0 +1,113 @@
+{
+  "binary": "rv32m_div_rem_signed",
+  "cases": [
+    {
+      "name": "7_div_2",
+      "stdin_hex": "0700000002000000",
+      "stdout_hex": "0300000001000000",
+      "exit_code": 0
+    },
+    {
+      "name": "7_div_neg2",
+      "stdin_hex": "07000000feffffff",
+      "stdout_hex": "fdffffff01000000",
+      "exit_code": 0
+    },
+    {
+      "name": "neg7_div_2",
+      "stdin_hex": "f9ffffff02000000",
+      "stdout_hex": "fdffffffffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "neg7_div_neg2",
+      "stdin_hex": "f9fffffffeffffff",
+      "stdout_hex": "03000000ffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "5_div_10",
+      "stdin_hex": "050000000a000000",
+      "stdout_hex": "0000000005000000",
+      "exit_code": 0
+    },
+    {
+      "name": "neg5_div_10",
+      "stdin_hex": "fbffffff0a000000",
+      "stdout_hex": "00000000fbffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "5_div_neg10",
+      "stdin_hex": "05000000f6ffffff",
+      "stdout_hex": "0000000005000000",
+      "exit_code": 0
+    },
+    {
+      "name": "neg5_div_neg10",
+      "stdin_hex": "fbfffffff6ffffff",
+      "stdout_hex": "00000000fbffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "zero_div",
+      "stdin_hex": "0000000005000000",
+      "stdout_hex": "0000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "min_overflow",
+      "stdin_hex": "00000080ffffffff",
+      "stdout_hex": "0000008000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "min_div_two",
+      "stdin_hex": "0000008002000000",
+      "stdout_hex": "000000c000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "max_div_neg1",
+      "stdin_hex": "ffffff7fffffffff",
+      "stdout_hex": "0100008000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "123456789_div_1",
+      "stdin_hex": "15cd5b0701000000",
+      "stdout_hex": "15cd5b0700000000",
+      "exit_code": 0
+    },
+    {
+      "name": "123456789_div_neg1",
+      "stdin_hex": "15cd5b07ffffffff",
+      "stdout_hex": "eb32a4f800000000",
+      "exit_code": 0
+    },
+    {
+      "name": "one_div_zero",
+      "stdin_hex": "0100000000000000",
+      "stdout_hex": "ffffffff01000000",
+      "exit_code": 0
+    },
+    {
+      "name": "neg1_div_zero",
+      "stdin_hex": "ffffffff00000000",
+      "stdout_hex": "ffffffffffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "min_div_zero",
+      "stdin_hex": "0000008000000000",
+      "stdout_hex": "ffffffff00000080",
+      "exit_code": 0
+    },
+    {
+      "name": "zero_div_zero",
+      "stdin_hex": "0000000000000000",
+      "stdout_hex": "ffffffff00000000",
+      "exit_code": 0
+    }
+  ]
+}

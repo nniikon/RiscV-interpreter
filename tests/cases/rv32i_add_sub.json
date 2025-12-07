@@ -1,0 +1,35 @@
+{
+  "binary": "rv32i_add_sub",
+  "cases": [
+    {
+      "name": "zero",
+      "stdin_hex": "0000000000000000",
+      "stdout_hex": "0000000000000000",
+      "exit_code": 0
+    },
+    {
+      "name": "simple",
+      "stdin_hex": "0100000002000000",
+      "stdout_hex": "03000000ffffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "wraparound_add",
+      "stdin_hex": "ffffffff01000000",
+      "stdout_hex": "00000000feffffff",
+      "exit_code": 0
+    },
+    {
+      "name": "large_sub",
+      "stdin_hex": "00286bee01000000",
+      "stdout_hex": "01286beeff276bee",
+      "exit_code": 0
+    },
+    {
+      "name": "near_equal",
+      "stdin_hex": "40420f0041420f00",
+      "stdout_hex": "81841e00ffffffff",
+      "exit_code": 0
+    }
+  ]
+}
