@@ -57,7 +57,7 @@ inline uint32_t KeyTypeS_Fsw(InstructionDecodedCommonType /*info*/) {
 
 inline void RegisterOpcodeGroupTypeS_Fsw(rvi::InstructionRegistry* registry) {
     registry->RegisterGroup(
-        rvi::PerOpcodeGroup(/*size*/ 0u, &KeyTypeS_Fsw, &DecodeInstructionToCommonTypeS),
+        rvi::PerOpcodeGroup(/*size*/ 1u, &KeyTypeS_Fsw, &DecodeInstructionToCommonTypeS),
         Fsw::kOpcode
     );
 
