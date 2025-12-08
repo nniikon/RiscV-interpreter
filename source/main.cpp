@@ -4,6 +4,7 @@
 
 #include "rv32i/rvi_rv32i_registration.hpp"
 #include "rv32m/rvi_rv32m_registration.hpp"
+#include "rv32f/rvi_rv32f_registration.hpp"
 
 #include "loguru.hpp"
 #include "cxxopts.hpp"
@@ -15,6 +16,7 @@ rvi::InstructionRegistry GetReadyRegistry() {
 
     rvi::rv32i::RegisterRV32I(&registry);
     rvi::rv32m::RegisterRV32M(&registry);
+    rvi::rv32f::RegisterRV32F(&registry);
     return registry;
 }
 } // namespace
@@ -34,18 +36,22 @@ int main(const int argc, const char* const* argv) {
     }
 
     rvi::ReadBinary read_binary(result["input"].as<std::string>());
-    auto section_info = read_binary.GetTextSectionView();
-    auto code = reinterpret_cast<const uint32_t*>(section_info.section.data());
+    rvi::InterpreterState state{};
+
+    uint32_t entry_point = 0;
+    read_binary.LoadIntoMemory(&state.memory, &entry_point);
 
     auto registry = GetReadyRegistry();
 
-    rvi::InterpreterState state{};
-    state.pc = section_info.start_offset;
+    state.pc = entry_point;
+    constexpr uint32_t kStackPadding = 0x10000u;
+    const uint32_t stack_top = static_cast<uint32_t>(state.memory.Size() - kStackPadding) & ~0xFu;
+    state.regs.Set(2u, stack_top); // x2 = sp
 
     rvi::ExecutionStatus status = rvi::ExecutionStatus::Success;
     while (status == rvi::ExecutionStatus::Success) {
         LOG_F(INFO, "[pc = %x]", state.pc);
-        auto instr_raw = code[state.pc / 4];
+        auto instr_raw = state.memory.Read<uint32_t>(state.pc);
 
         auto [instr_interface, decoded_info] = registry.GetInstruction(instr_raw);
 
