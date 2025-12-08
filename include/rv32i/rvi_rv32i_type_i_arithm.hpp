@@ -227,22 +227,72 @@ inline void RegisterInstructionsTypeI_Arithm(rvi::InstructionRegistry* registry)
 }
 
 inline uint32_t KeyTypeI_Arithm(InstructionDecodedCommonType info) {
-    auto i = std::get<InstructionDecodedInfoTypeI>(info);
-    uint32_t srai_bit = 0;
+    // FIXME: should be smarter and not specific to any instruction
+    const auto i = std::get<InstructionDecodedInfoTypeI>(info);
+    const uint32_t funct3 = i.funct3 & 0x7u;
+    const uint32_t imm = static_cast<uint32_t>(i.imm) & 0xFFFu;
 
-
-    if (i.funct3 == SraiOper::funct3) {
-        srai_bit = (static_cast<uint32_t>(i.imm) >> 10); // 0 for SRLI, 1 for SRAI
+    switch (funct3) {
+        case 0b000u: return 0u;  // addi
+        case 0b010u: return 4u;  // slti
+        case 0b011u: return 6u;  // sltiu
+        case 0b100u: return 8u;  // xori
+        case 0b110u: return 12u; // ori
+        case 0b111u: return 14u; // andi
+        case 0b001u: {
+            const uint32_t imm_hi = (imm >> 5) & 0x7Fu;
+            if (imm_hi == 0u) {
+                return 2u; // slli
+            }
+            if (imm_hi == 0b0110000u) {
+                const uint32_t imm_lo = imm & 0x1Fu;
+                switch (imm_lo) {
+                    case 0b00000u: return 16u; // clz
+                    case 0b00001u: return 17u; // ctz
+                    case 0b00010u: return 18u; // cpop
+                    case 0b00100u: return 19u; // sext.b
+                    case 0b00101u: return 20u; // sext.h
+                    default: break;
+                }
+            }
+            break;
+        }
+        case 0b101u: {
+            const uint32_t imm_hi = (imm >> 5) & 0x7Fu;
+            if (imm_hi == 0u) {
+                return 10u; // srli
+            }
+            if (imm_hi == 0b0100000u) {
+                return 11u; // srai
+            }
+            if (imm_hi == 0b0110000u) {
+                return 21u; // rori
+            }
+            if (imm_hi == 0b0010100u) {
+                return 22u; // orc.b
+            }
+            if (imm_hi == 0b0110100u) {
+                return 23u; // rev8
+            }
+            break;
+        }
+        default:
+            break;
     }
 
-    return static_cast<uint32_t>((i.funct3 << 1) | srai_bit);
+    uint32_t srai_bit = 0;
+    if (funct3 == SraiOper::funct3) {
+        srai_bit = (imm >> 10) & 0x1u; // 0 for SRLI, 1 for SRAI
+    }
+
+    return static_cast<uint32_t>((funct3 << 1) | srai_bit);
 }
 
 } // namespace
 
 inline void RegisterOpcodeGroupTypeI_Arithm(rvi::InstructionRegistry* registry) {
     registry->RegisterGroup(
-        rvi::PerOpcodeGroup(/*size*/ 16u, &KeyTypeI_Arithm, &DecodeInstructionToCommonTypeI),
+        rvi::PerOpcodeGroup(/*size*/ 32u, &KeyTypeI_Arithm, &DecodeInstructionToCommonTypeI),
         Addi::kOpcode);
 
     RegisterInstructionsTypeI_Arithm(registry);
