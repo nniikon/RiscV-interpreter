@@ -4,6 +4,7 @@
 #include <span>
 #include <string>
 
+#include "rvi_memory_state.hpp"
 #include "rvi_mmap_file.hpp"
 
 namespace rvi {
@@ -20,7 +21,7 @@ public:
     ReadBinary(std::string_view path);
 
     SectionInfo GetTextSectionView() const;
-    uint32_t                 GetStartOffset()     const;
+    void LoadIntoMemory(InterpreterMemoryModel* memory, uint32_t* entry_point) const;
 };
 
 } // namespace
