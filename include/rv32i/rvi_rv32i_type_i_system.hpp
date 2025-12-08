@@ -95,7 +95,7 @@ public:
                 return Exit(state);
 
             default:
-                LOG_F(ERROR, "Ecall argument %u not implemented", static_cast<uint32_t>(arg));
+                DLOG_F(ERROR, "Ecall argument %u not implemented", static_cast<uint32_t>(arg));
                 assert(0);
         }
         return ExecutionStatus::Success;

@@ -31,7 +31,7 @@ bool PerOpcodeGroup::AddInstruction(std::unique_ptr<IInstruction> instr) {
         return false;
 
     entry = std::move(instr);
-    LOG_F(INFO, "+--- " "Add instruction %6s to opcode group with key %x",
+    DLOG_F(INFO, "+--- " "Add instruction %6s to opcode group with key %x",
           entry->GetName(),
           key);
 
@@ -62,11 +62,11 @@ InstructionLookupResult PerOpcodeGroup::GetInstruction(uint32_t instr) const {
     auto& entry = lookup_table_.at(key);
 
     if (entry.get() == nullptr) {
-        LOG_F(WARNING, "No instruction %x for key %x in opcode group", instr, key);
+        DLOG_F(WARNING, "No instruction %x for key %x in opcode group", instr, key);
         return {nullptr, info};
     }
 
-    LOG_F(INFO, "Fetch instruction %s(%x) with opcode %x, key %x, while real opcode is %x", entry->GetName(), instr, entry->GetOpcode(), key, get_opcode(instr));
+    DLOG_F(INFO, "Fetch instruction %s(%x) with opcode %x, key %x, while real opcode is %x", entry->GetName(), instr, entry->GetOpcode(), key, get_opcode(instr));
 
     return {entry.get(), info};
 }
@@ -79,7 +79,7 @@ bool InstructionRegistry::RegisterInstruction(std::unique_ptr<IInstruction> inst
     auto opcode = instr->GetOpcode();
 
     if (!lookup_table_.at(opcode).IsInit()) {
-        LOG_F(WARNING, "Opcode group is not registered");
+        DLOG_F(WARNING, "Opcode group is not registered");
         return false;
     }
 
@@ -89,13 +89,13 @@ bool InstructionRegistry::RegisterInstruction(std::unique_ptr<IInstruction> inst
 bool InstructionRegistry::RegisterGroup(PerOpcodeGroup group,
                                         uint32_t opcode) {
     if (lookup_table_.at(opcode).IsInit()) {
-        LOG_F(WARNING, "Opcode group is already registered");
+        DLOG_F(WARNING, "Opcode group is already registered");
         return false;
     }
 
     lookup_table_[opcode] = std::move(group);
-    LOG_F(INFO, " ");
-    LOG_F(INFO, "+ Add group with opcode %x", opcode);
+    DLOG_F(INFO, " ");
+    DLOG_F(INFO, "+ Add group with opcode %x", opcode);
 
     return true;
 }
@@ -105,7 +105,7 @@ InstructionLookupResult InstructionRegistry::GetInstruction(uint32_t instr) cons
 
     auto& per_opcode_group = lookup_table_[opcode];
     if (!per_opcode_group.IsInit()) {
-        LOG_F(WARNING, "PerOpcodeGroup for instruction %x with opcode %x is not registered", instr, opcode);
+        DLOG_F(WARNING, "PerOpcodeGroup for instruction %x with opcode %x is not registered", instr, opcode);
         assert(0);
 
         return {nullptr, InstructionDecodedCommonType{}};

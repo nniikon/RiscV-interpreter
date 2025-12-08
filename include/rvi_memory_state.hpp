@@ -46,7 +46,7 @@ public:
 
 template <typename T>
 T InterpreterMemoryModel::Get(uint32_t address) const {
-    LOG_F(INFO, "Getting mem[%x] ...", address);
+    DLOG_F(INFO, "Getting mem[%x] ...", address);
 
     T value{};
     std::memcpy(&value, &memory_[address], sizeof(T));
@@ -54,7 +54,7 @@ T InterpreterMemoryModel::Get(uint32_t address) const {
     {
         uint32_t debug_value = 0;
         std::memcpy(&debug_value, &value, sizeof(value));
-        LOG_F(INFO, "Getting mem[%x] = %x", address, debug_value);
+        DLOG_F(INFO, "Getting mem[%x] = %x", address, debug_value);
     }
 
     return value;
@@ -65,7 +65,7 @@ void InterpreterMemoryModel::Set(uint32_t address, T value) {
     {
         uint32_t debug_value = 0;
         std::memcpy(&debug_value, &value, sizeof(value));
-        LOG_F(INFO, "Setting mem[%x] = %x", address, debug_value);
+        DLOG_F(INFO, "Setting mem[%x] = %x", address, debug_value);
     }
 
     std::memcpy(&memory_[address], &value, sizeof(T));

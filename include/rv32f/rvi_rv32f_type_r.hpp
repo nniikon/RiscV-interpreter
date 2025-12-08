@@ -133,7 +133,7 @@ public:
         ScopedRoundingMode guard(info.funct7 & 0x03);
         Oper::exec(state, info);
 
-        LOG_F(INFO, "HUI %s(%f, %f) = %f", Oper::name, state->f_regs.Get(info.rs1), state->f_regs.Get(info.rs2), state->f_regs.Get(info.rd));
+        DLOG_F(INFO, "HUI %s(%f, %f) = %f", Oper::name, state->f_regs.Get(info.rs1), state->f_regs.Get(info.rs2), state->f_regs.Get(info.rd));
 
         state->pc += 4u;
         return ExecutionStatus::Success;

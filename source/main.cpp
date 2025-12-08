@@ -50,7 +50,7 @@ int main(const int argc, const char* const* argv) {
 
     rvi::ExecutionStatus status = rvi::ExecutionStatus::Success;
     while (status == rvi::ExecutionStatus::Success) {
-        LOG_F(INFO, "[pc = %x]", state.pc);
+        DLOG_F(INFO, "[pc = %x]", state.pc);
         auto instr_raw = state.memory.Read<uint32_t>(state.pc);
 
         auto [instr_interface, decoded_info] = registry.GetInstruction(instr_raw);
@@ -58,7 +58,7 @@ int main(const int argc, const char* const* argv) {
         status = instr_interface->Execute(&state, decoded_info);
     }
 
-    LOG_F(INFO, "Program exit with code %i", state.return_code);
+    DLOG_F(INFO, "Program exit with code %i", state.return_code);
 
     return state.return_code;
 }
