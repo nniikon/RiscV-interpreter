@@ -4,11 +4,13 @@ ABI          := ilp32
 MARCH_I      := rv32i
 MARCH_M      := rv32im
 MARCH_F      := rv32if
+MARCH_ZBB    := rv32izbb
 ASFLAGS      := -mabi=$(ABI) -march=$(MARCH_I)
 CFLAGS_BASE  := -mabi=$(ABI) -nostartfiles -nostdlib -static -ffreestanding -nodefaultlibs
 CFLAGS_I     := $(CFLAGS_BASE) -march=$(MARCH_I)
 CFLAGS_M     := $(CFLAGS_BASE) -march=$(MARCH_M)
 CFLAGS_F     := $(CFLAGS_BASE) -march=$(MARCH_F)
+CFLAGS_ZBB   := $(CFLAGS_BASE) -march=$(MARCH_ZBB)
 
 RV32I_TEST_SRCS := \
 	test_add.c \
@@ -37,10 +39,14 @@ RV32F_TEST_SRCS := \
 	rv32f_convert.c \
 	rv32f_sign_compare.c
 
+RV32ZBB_TEST_SRCS := \
+	rv32zbb.c
+
 RV32I_TEST_BINS := $(RV32I_TEST_SRCS:.c=)
 RV32M_TEST_BINS := $(RV32M_TEST_SRCS:.c=)
 RV32F_TEST_BINS := $(RV32F_TEST_SRCS:.c=)
-TEST_BINS       := $(RV32I_TEST_BINS) $(RV32M_TEST_BINS) $(RV32F_TEST_BINS)
+RV32ZBB_TEST_BINS := $(RV32ZBB_TEST_SRCS:.c=)
+TEST_BINS       := $(RV32I_TEST_BINS) $(RV32M_TEST_BINS) $(RV32F_TEST_BINS) $(RV32ZBB_TEST_BINS)
 
 .PHONY: all tests clean
 
@@ -59,6 +65,9 @@ $(RV32M_TEST_BINS): %: %.c api.o
 
 $(RV32F_TEST_BINS): %: %.c api.o
 	$(CC) $(CFLAGS_F) api.o $< -o $@
+
+$(RV32ZBB_TEST_BINS): %: %.c api.o
+	$(CC) $(CFLAGS_ZBB) api.o $< -o $@
 
 clean:
 	rm -f api.o $(TEST_BINS)

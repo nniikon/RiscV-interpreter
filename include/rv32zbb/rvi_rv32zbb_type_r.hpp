@@ -1,4 +1,3 @@
-// RV32Zbb R-type operations (bit-manip)
 #pragma once
 
 #include <cstdint>
@@ -7,6 +6,8 @@
 #include "rvi_decode_info.hpp"
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
+
+#include "rvi_rv32zbb_common_helpers.hpp"
 
 namespace rvi {
 namespace rv32zbb {
@@ -40,29 +41,6 @@ public:
         return info;
     }
 };
-
-namespace {
-
-constexpr uint32_t kRotateMask = 0x1Fu;
-constexpr uint32_t kXLen = 32u;
-
-inline uint32_t RotateLeft32(uint32_t value, uint32_t amount) {
-    const uint32_t sh = amount & kRotateMask;
-    if (sh == 0u) {
-        return value;
-    }
-    return (value << sh) | (value >> (kXLen - sh));
-}
-
-inline uint32_t RotateRight32(uint32_t value, uint32_t amount) {
-    const uint32_t sh = amount & kRotateMask;
-    if (sh == 0u) {
-        return value;
-    }
-    return (value >> sh) | (value << (kXLen - sh));
-}
-
-} // namespace
 
 struct AndnOp {
     constexpr static const char* const name = "andn";
