@@ -18,11 +18,16 @@ RV32I_TEST_SRCS := \
 	rv32i_compare.c \
 	rv32i_control_flow.c \
 	rv32i_memory.c \
-	rv32i_shift.c
+	rv32i_shift.c \
+	test_echo
 
 RV32M_TEST_SRCS := \
 	test_div.c \
 	test_mul.c \
+	test_fib.c \
+	test_quick_sort.c \
+	test_sort.c \
+	test_z_avl.c \
 	rv32m_div_rem_signed.c \
 	rv32m_div_rem_unsigned.c \
 	rv32m_mul.c

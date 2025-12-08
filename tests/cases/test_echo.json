@@ -1,0 +1,17 @@
+{
+  "binary": "test_echo",
+  "cases": [
+    {
+      "name": "short_string",
+      "stdin_hex": "123123123123",
+      "stdout_hex": "123123123123",
+      "exit_code": 6
+    },
+    {
+      "name": "long_string",
+      "stdin_hex": "012983019348932875912374982734918273AAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCCCDDDDDDDDDD1",
+      "stdout_hex": "012983019348932875912374982734918273AAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCCCDDDDDDDDDD1",
+      "exit_code": 42
+    }
+  ]
+}

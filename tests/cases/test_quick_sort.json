@@ -1,0 +1,11 @@
+{
+  "binary": "test_quick_sort",
+  "cases": [
+    {
+      "name": "baseline",
+      "stdin_hex": "",
+      "stdout_hex": "",
+      "exit_code": 0
+    }
+  ]
+}

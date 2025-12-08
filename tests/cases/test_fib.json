@@ -1,0 +1,11 @@
+{
+  "binary": "test_fib",
+  "cases": [
+    {
+      "name": "baseline",
+      "stdin_hex": "",
+      "stdout_hex": "",
+      "exit_code": 0
+    }
+  ]
+}
