@@ -146,6 +146,7 @@ public:
         InstructionDecodedInfoTypeR info = {
             .opcode = kOpcode,
             .funct3 = Oper::funct3,
+            .rs2    = Oper::rs2 == 0b111111 ? 0 : Oper::rs2,
             .funct7 = Oper::funct7,
         };
 
@@ -157,6 +158,7 @@ struct FAddSOper {
     constexpr static const char* const name = "fadd.s";
     constexpr static uint32_t funct7 = 0b0000000u;
     constexpr static uint32_t funct3 = 0b111;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -170,6 +172,7 @@ struct FSubSOper {
     constexpr static const char* const name = "fsub.s";
     constexpr static uint32_t funct7 = 0b0000100u;
     constexpr static uint32_t funct3 = 0b111;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -183,6 +186,7 @@ struct FMulSOper {
     constexpr static const char* const name = "fmul.s";
     constexpr static uint32_t funct7 = 0b0001000u;
     constexpr static uint32_t funct3 = 0b111;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -196,6 +200,7 @@ struct FDivSOper {
     constexpr static const char* const name = "fdiv.s";
     constexpr static uint32_t funct7 = 0b0001100u;
     constexpr static uint32_t funct3 = 0b111;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -209,6 +214,7 @@ struct FSqrtSOper {
     constexpr static const char* const name = "fsqrt.s";
     constexpr static uint32_t funct7 = 0b0101100u;
     constexpr static uint32_t funct3 = 0b111;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float value = state->f_regs.Get(info.rs1);
@@ -221,6 +227,7 @@ struct FSgnjSOper {
     constexpr static const char* const name = "fsgnj.s";
     constexpr static uint32_t funct7 = 0b0010000u;
     constexpr static uint32_t funct3 = 0b000u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -234,6 +241,7 @@ struct FSgnjnSOper {
     constexpr static const char* const name = "fsgnjn.s";
     constexpr static uint32_t funct7 = 0b0010000u;
     constexpr static uint32_t funct3 = 0b001u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -249,6 +257,7 @@ struct FSgnjxSOper {
     constexpr static const char* const name = "fsgnjx.s";
     constexpr static uint32_t funct7 = 0b0010000u;
     constexpr static uint32_t funct3 = 0b010u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const uint32_t lhs_bits = std::bit_cast<uint32_t>(state->f_regs.Get(info.rs1));
@@ -265,6 +274,7 @@ struct FMinSOper {
     constexpr static const char* const name = "fmin.s";
     constexpr static uint32_t funct7 = 0b0010100u;
     constexpr static uint32_t funct3 = 0b000u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -278,6 +288,7 @@ struct FMaxSOper {
     constexpr static const char* const name = "fmax.s";
     constexpr static uint32_t funct7 = 0b0010100u;
     constexpr static uint32_t funct3 = 0b001u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -291,6 +302,7 @@ struct FEqSOper {
     constexpr static const char* const name = "feq.s";
     constexpr static uint32_t funct7 = 0b1010000u;
     constexpr static uint32_t funct3 = 0b010u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -306,6 +318,7 @@ struct FLtSOper {
     constexpr static const char* const name = "flt.s";
     constexpr static uint32_t funct7 = 0b1010000u;
     constexpr static uint32_t funct3 = 0b001u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -321,6 +334,7 @@ struct FLeSOper {
     constexpr static const char* const name = "fle.s";
     constexpr static uint32_t funct7 = 0b1010000u;
     constexpr static uint32_t funct3 = 0b000u;
+    constexpr static uint32_t rs2 = 0b111111;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float lhs = state->f_regs.Get(info.rs1);
@@ -336,6 +350,7 @@ struct FCvtWSOper {
     constexpr static const char* const name = "fcvt.w.s";
     constexpr static uint32_t funct7 = 0b1100000u;
     constexpr static uint32_t funct3 = 0b111;
+    constexpr static uint32_t rs2 = 0b00000;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float   value = state->f_regs.Get(info.rs1);
@@ -349,6 +364,7 @@ struct FCvtWUSOper {
     constexpr static const char* const name = "fcvt.wu.s";
     constexpr static uint32_t funct7 = 0b1100000u;
     constexpr static uint32_t funct3 = 111u;
+    constexpr static uint32_t rs2 = 0b00001;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float    value = state->f_regs.Get(info.rs1);
@@ -362,6 +378,7 @@ struct FCvtSWOper {
     constexpr static const char* const name = "fcvt.s.w";
     constexpr static uint32_t funct7 = 0b1101000u;
     constexpr static uint32_t funct3 = 111u;
+    constexpr static uint32_t rs2 = 0b00000;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const int32_t value = static_cast<int32_t>(state->regs.Get(info.rs1));
@@ -374,6 +391,7 @@ struct FCvtSWUOper {
     constexpr static const char* const name = "fcvt.s.wu";
     constexpr static uint32_t funct7 = 0b1101000u;
     constexpr static uint32_t funct3 = 111u;
+    constexpr static uint32_t rs2 = 0b00001;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const uint32_t value = state->regs.Get(info.rs1);
@@ -386,6 +404,7 @@ struct FClassSOper {
     constexpr static const char* const name = "fclass.s";
     constexpr static uint32_t funct7 = 0b1110000u;
     constexpr static uint32_t funct3 = 0b001u;
+    constexpr static uint32_t rs2 = 0b00000;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float value = state->f_regs.Get(info.rs1);
@@ -398,6 +417,7 @@ struct FMvXWOper {
     constexpr static const char* const name = "fmv.x.w";
     constexpr static uint32_t funct7 = 0b1110000u;
     constexpr static uint32_t funct3 = 0b000u;
+    constexpr static uint32_t rs2 = 0b00000;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const float value = state->f_regs.Get(info.rs1);
@@ -410,6 +430,7 @@ struct FMvWXOper {
     constexpr static const char* const name = "fmv.w.x";
     constexpr static uint32_t funct7 = 0b1111000u;
     constexpr static uint32_t funct3 = 0b000u;
+    constexpr static uint32_t rs2 = 0b00000;
 
     static void exec(InterpreterState* state, const InstructionDecodedInfoTypeR& info) {
         const uint32_t value = state->regs.Get(info.rs1);
@@ -470,52 +491,115 @@ constexpr uint32_t kRs2Bits = 5u;
 constexpr uint32_t kFunct3Mask = (1u << kFunct3Bits) - 1u;
 constexpr uint32_t kFunct7Mask = (1u << kFunct7Bits) - 1u;
 constexpr uint32_t kRs2Mask = (1u << kRs2Bits) - 1u;
-constexpr size_t   kOpcodeGroupKeySpace = 1u << (kFunct3Bits + kFunct7Bits + kRs2Bits);
-
-inline bool Funct7UsesRm(uint32_t funct7) {
-    switch (funct7 & kFunct7Mask) {
-        case 0b0000000u:
-        case 0b0000100u:
-        case 0b0001000u:
-        case 0b0001100u:
-        case 0b0101100u:
-        case 0b1100000u:
-        case 0b1101000u:
-            return true;
-        default:
-            return false;
-    }
-}
-
-inline bool Funct7RequiresRs2Specifier(uint32_t funct7) {
-    switch (funct7 & kFunct7Mask) {
-        case 0b1100000u:
-        case 0b1101000u:
-            return true;
-        default:
-            return false;
-    }
-}
+constexpr size_t   kOpcodeGroupKeySpace = 32u;
 
 inline uint32_t KeyTypeR_Float(InstructionDecodedCommonType info) {
     const auto& r = std::get<InstructionDecodedInfoTypeR>(info);
 
-    uint32_t funct7 = r.funct7 & kFunct7Mask;
-    uint32_t funct3 = r.funct3 & kFunct3Mask;
+    // well at least its memory efficient 
+    // FIXME: remove
+    switch (r.funct7 & kFunct7Mask) {
+        // 0: fadd.s
+        case 0b0000000u:
+            return 0u;
 
-    if (Funct7UsesRm(funct7)) {
-        funct3 = 0u;
+        // 1: fsub.s
+        case 0b0000100u:
+            return 1u;
+
+        // 2: fmul.s
+        case 0b0001000u:
+            return 2u;
+
+        // 3: fdiv.s
+        case 0b0001100u:
+            return 3u;
+
+        // 4: fsqrt.s
+        case 0b0101100u:
+            return 4u;
+
+        // 5–7: fsgnj.s / fsgnjn.s / fsgnjx.s  (distinguish by funct3)
+        case 0b0010000u:
+            switch (r.funct3 & kFunct3Mask) {
+                // 5: fsgnj.s
+                case 0b000u: return 5u;
+                // 6: fsgnjn.s
+                case 0b001u: return 6u;
+                // 7: fsgnjx.s
+                case 0b010u: return 7u;
+                default: break;
+            }
+            break;
+
+        // 8–9: fmin.s / fmax.s  (distinguish by funct3)
+        case 0b0010100u:
+            switch (r.funct3 & kFunct3Mask) {
+                // 8: fmin.s
+                case 0b000u: return 8u;
+                // 9: fmax.s
+                case 0b001u: return 9u;
+                default: break;
+            }
+            break;
+
+        // 10–12: feq.s / flt.s / fle.s  (distinguish by funct3)
+        case 0b1010000u:
+            switch (r.funct3 & kFunct3Mask) {
+                // 12: fle.s
+                case 0b000u: return 12u;
+                // 11: flt.s
+                case 0b001u: return 11u;
+                // 10: feq.s
+                case 0b010u: return 10u;
+                default: break;
+            }
+            break;
+
+        // 13–14: fcvt.w.s / fcvt.wu.s  (distinguish by rs2)
+        case 0b1100000u:
+            switch (r.rs2 & kRs2Mask) {
+                // 13: fcvt.w.s
+                case 0b00000u: return 13u;
+                // 14: fcvt.wu.s
+                case 0b00001u: return 14u;
+                default: break;
+            }
+            break;
+
+        // 15–16: fcvt.s.w / fcvt.s.wu  (distinguish by rs2)
+        case 0b1101000u:
+            switch (r.rs2 & kRs2Mask) {
+                // 15: fcvt.s.w
+                case 0b00000u: return 15u;
+                // 16: fcvt.s.wu
+                case 0b00001u: return 16u;
+                default: break;
+            }
+            break;
+
+        // 17–18: fclass.s / fmv.x.w  (distinguish by funct3)
+        case 0b1110000u:
+            switch (r.funct3 & kFunct3Mask) {
+                // 18: fmv.x.w
+                case 0b000u: return 18u;
+                // 17: fclass.s
+                case 0b001u: return 17u;
+                default: break;
+            }
+            break;
+
+        // 19: fmv.w.x
+        case 0b1111000u:
+            return 19u;
+
+        default:
+            break;
     }
 
-    uint32_t key = (funct7 << kFunct3Bits) | funct3;
-    key <<= kRs2Bits;
-
-    if (Funct7RequiresRs2Specifier(funct7)) {
-        key |= (r.rs2 & kRs2Mask);
-    }
-
-    return key;
+    return kOpcodeGroupKeySpace - 1u;
 }
+
 
 } // namespace
 

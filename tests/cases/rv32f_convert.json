@@ -1,0 +1,17 @@
+{
+  "binary": "rv32f_convert",
+  "cases": [
+    {
+      "name": "negative_signed",
+      "stdin_hex": "d6ffffff7b0000000000e0bf00002040",
+      "stdout_hex": "000028c20000f642feffffff02000000",
+      "exit_code": 0
+    },
+    {
+      "name": "large_positive_values",
+      "stdin_hex": "00000100010001000000604000005c41",
+      "stdout_hex": "0000804780008047040000000e000000",
+      "exit_code": 0
+    }
+  ]
+}

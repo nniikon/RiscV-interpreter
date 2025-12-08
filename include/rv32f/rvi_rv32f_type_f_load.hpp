@@ -9,6 +9,8 @@
 #include "rvi_instruction_interface.hpp"
 #include "rvi_instruction_registry.hpp"
 
+#include "loguru.hpp"
+
 namespace rvi {
 namespace rv32f {
 
@@ -27,6 +29,8 @@ public:
         auto value = state->memory.Get<float>(addr);
 
         state->f_regs.Set(info.rd, value);
+
+        LOG_F(INFO, "HUI Setting register %d to value %g", info.rd, value);
 
         state->pc += 4u;
 
