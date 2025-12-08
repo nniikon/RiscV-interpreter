@@ -8,6 +8,7 @@ namespace rvi {
 
 struct InterpreterState {
     InterpreterRegisters regs;
+    InterpreterRegistersFloat f_regs;
     uint32_t pc;
     InterpreterMemoryModel memory;
     int32_t return_code;

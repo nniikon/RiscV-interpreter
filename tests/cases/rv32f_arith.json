@@ -1,0 +1,23 @@
+{
+  "binary": "rv32f_arith",
+  "cases": [
+    {
+      "name": "positive_pair",
+      "stdin_hex": "0000c03f00001040",
+      "stdout_hex": "00007040000040bf00005840abaa2a3f71c49c3f0000c03f00001040",
+      "exit_code": 0
+    },
+    {
+      "name": "mixed_sign",
+      "stdin_hex": "00004840000000bf",
+      "stdout_hex": "00002840000068400000c8bf0000c8c03046e23f000000bf00004840",
+      "exit_code": 0
+    },
+    {
+      "name": "zeros_and_large",
+      "stdin_hex": "000000000000fa40",
+      "stdout_hex": "0000fa400000fac0000000000000000000000000000000000000fa40",
+      "exit_code": 0
+    }
+  ]
+}

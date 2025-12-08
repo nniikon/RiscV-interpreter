@@ -3,10 +3,12 @@ CC           := riscv64-unknown-elf-gcc
 ABI          := ilp32
 MARCH_I      := rv32i
 MARCH_M      := rv32im
+MARCH_F      := rv32if
 ASFLAGS      := -mabi=$(ABI) -march=$(MARCH_I)
 CFLAGS_BASE  := -mabi=$(ABI) -nostartfiles -nostdlib -static -ffreestanding -nodefaultlibs
 CFLAGS_I     := $(CFLAGS_BASE) -march=$(MARCH_I)
 CFLAGS_M     := $(CFLAGS_BASE) -march=$(MARCH_M)
+CFLAGS_F     := $(CFLAGS_BASE) -march=$(MARCH_F)
 
 RV32I_TEST_SRCS := \
 	test_add.c \
@@ -25,9 +27,15 @@ RV32M_TEST_SRCS := \
 	rv32m_div_rem_unsigned.c \
 	rv32m_mul.c
 
+RV32F_TEST_SRCS := \
+	rv32f_arith.c \
+	rv32f_convert.c \
+	rv32f_sign_compare.c
+
 RV32I_TEST_BINS := $(RV32I_TEST_SRCS:.c=)
 RV32M_TEST_BINS := $(RV32M_TEST_SRCS:.c=)
-TEST_BINS       := $(RV32I_TEST_BINS) $(RV32M_TEST_BINS)
+RV32F_TEST_BINS := $(RV32F_TEST_SRCS:.c=)
+TEST_BINS       := $(RV32I_TEST_BINS) $(RV32M_TEST_BINS) $(RV32F_TEST_BINS)
 
 .PHONY: all tests clean
 
@@ -43,6 +51,9 @@ $(RV32I_TEST_BINS): %: %.c api.o
 
 $(RV32M_TEST_BINS): %: %.c api.o
 	$(CC) $(CFLAGS_M) api.o $< -o $@
+
+$(RV32F_TEST_BINS): %: %.c api.o
+	$(CC) $(CFLAGS_F) api.o $< -o $@
 
 clean:
 	rm -f api.o $(TEST_BINS)
