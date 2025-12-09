@@ -5,6 +5,7 @@
 #include "rv32i/rvi_rv32i_registration.hpp"
 #include "rv32m/rvi_rv32m_registration.hpp"
 #include "rv32f/rvi_rv32f_registration.hpp"
+#include "rv32zbb/rvi_rv32zbb_registration.hpp"
 
 #include "loguru.hpp"
 #include "cxxopts.hpp"
@@ -17,6 +18,7 @@ rvi::InstructionRegistry GetReadyRegistry() {
     rvi::rv32i::RegisterRV32I(&registry);
     rvi::rv32m::RegisterRV32M(&registry);
     rvi::rv32f::RegisterRV32F(&registry);
+    rvi::rv32zbb::RegisterRV32zbb(&registry);
     return registry;
 }
 } // namespace

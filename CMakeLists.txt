@@ -74,6 +74,7 @@ add_executable(rvi
   ${PROJECT_SOURCE_DIR}/include/rv32i/rvi_rv32i_registration.cpp
   ${PROJECT_SOURCE_DIR}/include/rv32m/rvi_rv32m_registration.cpp
   ${PROJECT_SOURCE_DIR}/include/rv32f/rvi_rv32f_registration.cpp
+  ${PROJECT_SOURCE_DIR}/include/rv32zbb/rvi_rv32zbb_registration.cpp
   ${PROJECT_SOURCE_DIR}/source/rvi_mmap_file.cpp
   ${PROJECT_SOURCE_DIR}/source/rvi_decode_info.cpp
   ${PROJECT_SOURCE_DIR}/source/rvi_instruction_interface.cpp
